@@ -1,5 +1,6 @@
 package com.example.admin.a2017718;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -45,9 +46,8 @@ import java.util.List;
 public class Movie_view extends AppCompatActivity {
     int i = 1;
     public static List<movies> movielist = new ArrayList<>();
-    public static List<movies> tv_drama=new ArrayList<>();
-    public static List<movies> online_movie=new ArrayList<>();
-
+    public static List<movies> tv_drama = new ArrayList<>();
+    public static List<movies> online_movie = new ArrayList<>();
     private AlertDialog.Builder builder;
     private AlertDialog alertDialog;
     public static movie_adapter movie_adapter;
@@ -56,43 +56,72 @@ public class Movie_view extends AppCompatActivity {
     public ViewPager viewPager;
     ImageView line1;
     DisplayMetrics metric;
-
+    public static Context context;
+    public static TextView account;
+    public static TextView vip;
+    public static Boolean VIP = false;
+    public static String ACCOUNT = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content);
+        vip = (TextView) findViewById(R.id.vip);
+        account = (TextView) findViewById(R.id.account);
+        metric = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metric);
 
+        new update().execute("http://s.icodef.com/user/api/update");
+        new login().execute();
+        context = getApplication();
         viewfrist();
         button();
         movie_adapter = new movie_adapter(Movie_view.this);
-        tvdrama_adapter=new tvdrama_adapter(Movie_view.this);
-        online_adapter=new online_adapter(Movie_view.this);
+        tvdrama_adapter = new tvdrama_adapter(Movie_view.this);
+        online_adapter = new online_adapter(Movie_view.this);
 
-        List<Fragment> fragments=new ArrayList<>();
+        List<Fragment> fragments = new ArrayList<>();
         fragments.add(new Page1());
         fragments.add(new Page2());
         fragments.add(new Page3());
 
 
+        account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ACCOUNT == null) {
+                    Intent intent = new Intent(Movie_view.this, Login.class);
+                    startActivity(intent);
+                }else {
+                    VIP=false;
+                    ACCOUNT=null;
+                    account.setText("点击登录");
+                    vip.setText("开通VIP");
+                }
 
-        viewPager= (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(),fragments));
+            }
+        });
+        vip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent=new Intent(Movie_view.this,Webview.class);
+                intent.putExtra("url","https://www.baidu.com");
+                startActivity(intent);
+
+            }
+        });
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), fragments));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
                 LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) line1.getLayoutParams();
-                lp.leftMargin=(int)(positionOffset*metric.widthPixels/3)+metric.widthPixels/3*position;
+                lp.leftMargin = (int) (positionOffset * metric.widthPixels / 3) + metric.widthPixels / 3 * position;
                 line1.setLayoutParams(lp);
-                Log.e("SS",String.valueOf(position+"/"+positionOffset));
-
-
-
-
-
-
-
+                Log.e("SS", String.valueOf(position + "/" + positionOffset));
 
 
             }
@@ -107,24 +136,13 @@ public class Movie_view extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
         builder = new AlertDialog.Builder(Movie_view.this);
-
-
-
-        new update().execute("http://s.icodef.com/user/api/update");
-
-
 
 
     }
 
 
-    public void filelist(){
+    public void filelist() {
         String[] strings = fileList();
         for (int i = 0; i < strings.length; i++) {
             Log.e("list:", strings[i]);
@@ -132,9 +150,8 @@ public class Movie_view extends AppCompatActivity {
 
     }
 
-    public void button()
-    {
-        Button button1= (Button) findViewById(R.id.button1);
+    public void button() {
+        Button button1 = (Button) findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,16 +160,14 @@ public class Movie_view extends AppCompatActivity {
         });
 
 
-
-
-        Button button2= (Button) findViewById(R.id.button2);
+        Button button2 = (Button) findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(1);
             }
         });
-        Button button3= (Button) findViewById(R.id.button3);
+        Button button3 = (Button) findViewById(R.id.button3);
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,32 +176,39 @@ public class Movie_view extends AppCompatActivity {
         });
 
 
-
-
-
-
     }
 
-    public void viewfrist()
-    {
-        line1= (ImageView) findViewById(R.id.line1);
-         metric = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metric);
-        ViewGroup.LayoutParams layoutParams=line1.getLayoutParams();
-        layoutParams.width=metric.widthPixels/3;
-        layoutParams.height=metric.heightPixels/300;
+    public void viewfrist() {
+        line1 = (ImageView) findViewById(R.id.line1);
+        ViewGroup.LayoutParams layoutParams = line1.getLayoutParams();
+        layoutParams.width = metric.widthPixels / 3;
+        layoutParams.height = metric.heightPixels / 300;
         line1.setLayoutParams(layoutParams);
 
-
+        LinearLayout bar = (LinearLayout) findViewById(R.id.bar);
+        LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) bar.getLayoutParams();
+        layoutParams1.height = metric.heightPixels / 12;
+        bar.setLayoutParams(layoutParams1);
 
     }
 
+    public static Handler handler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            account.setText(msg.getData().getString("account"));
+            ACCOUNT = msg.getData().getString("account");
+            Log.e("VIP", VIP.toString());
+            if (VIP == true) {
+                vip.setText("VIP");
+            } else {
+            }
 
 
-
-
-
-
+        }
+    };
 
 
     @Override
@@ -404,15 +426,29 @@ public class Movie_view extends AppCompatActivity {
 
     }
 
+    class login extends AsyncTask<Void, Void, Boolean> {
 
+        @Override
+        protected Boolean doInBackground(Void... params) {
 
+            if (new locallogin().login() != true) {
+                Log.e("login", "false");
+                return false;
+            }
 
+            return true;
+        }
 
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
 
+            if (aBoolean == true) {
+                Toast.makeText(Movie_view.this, "登录成功", Toast.LENGTH_SHORT);
+            }
 
-
-
-
+        }
+    }
 
 
 }

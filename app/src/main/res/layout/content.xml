@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:orientation="vertical"
-     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -15,24 +15,63 @@
 
 
         <LinearLayout
+            android:id="@+id/bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#f77496"
-            android:orientation="horizontal">
+            android:layout_height="50dp"
+            android:background="#009ecd"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-            <ImageView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@mipmap/ic_launcher" />
+                android:layout_weight="1">
 
-            <TextView
+                <TextView
+                    android:id="@+id/vip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="#FFFFFF"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
+                    android:paddingTop="3dp"
+                    android:gravity="center"
+                    android:text="开通VIP" />
+
+                <TextView
+                    android:id="@+id/account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:text="点击登录"
+                    android:textColor="#ffffff"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="11011011010101"
-                android:textColor="#ffffff"
+                android:layout_weight="1"
+                android:gravity="right"
+                >
 
-                />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_launcher" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_launcher" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_launcher" />
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -44,27 +83,27 @@
 
             <Button
                 android:id="@+id/button1"
-                android:text="独播"
-                android:background="#FFFFFF"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                android:text="独播" />
 
             <Button
                 android:id="@+id/button2"
-                android:text="电视剧"
-                android:background="#FFFFFF"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                android:text="电视剧" />
 
             <Button
                 android:id="@+id/button3"
-                android:text="电影"
-                android:background="#FFFFFF"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                android:text="电影" />
 
 
         </LinearLayout>
@@ -73,17 +112,17 @@
             android:id="@+id/line1"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:background="#884499" />
+            android:background="#009ecd" />
 
     </LinearLayout>
 
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
-        android:layout_marginTop="3dp"
-
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp">
 
     </android.support.v4.view.ViewPager>
 

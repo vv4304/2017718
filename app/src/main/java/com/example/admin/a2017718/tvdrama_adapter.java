@@ -98,13 +98,13 @@ public class tvdrama_adapter extends BaseAdapter {
     }
 
 
-    class getitme extends AsyncTask<Integer, Void, Void> {
+    class getitme extends AsyncTask<Integer, Void, Boolean> {
 
         JSONObject jsonObject;
         JSONArray jsonArray;
 
         @Override
-        protected Void doInBackground(Integer... params) {
+        protected Boolean doInBackground(Integer... params) {
 
             String src = new gethttpcontent().return_contant("http://video.visha.cc/search?class=%E7%94%B5%E8%A7%86%E5%89%A7&page=" + params[0]);
 
@@ -115,39 +115,45 @@ public class tvdrama_adapter extends BaseAdapter {
             }
 
 
-            Log.e("A", src);
-
-            try {
-                jsonArray = jsonObject.getJSONArray("rows");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-            for (int i = 0; i < jsonArray.length(); i++) {
+            if (jsonObject != null) {
 
                 try {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-
-                    Movie_view.tv_drama.add(new movies(jsonObject.getString("title"), jsonObject.getString("update"), jsonObject.getString("image"), jsonObject.getString("url")));
-
+                    jsonArray = jsonObject.getJSONArray("rows");
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e("*", "rows获取失败");
                 }
 
 
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    try {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+
+                        Movie_view.tv_drama.add(new movies(jsonObject.getString("title"), jsonObject.getString("update"), jsonObject.getString("image"), jsonObject.getString("url")));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+                return true;
+            } else {
+                return false;
             }
 
-
-            return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
-            if (Page == 2) {
-                notifyDataSetChanged();
+
+            if (aVoid != false) {
+                if (Page == 2) {
+                    notifyDataSetChanged();
+                }
             }
         }
     }

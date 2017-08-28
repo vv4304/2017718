@@ -90,9 +90,8 @@ public class movie_adapter extends BaseAdapter {
 
         new loadimage().execute(String.valueOf(movielist.get(position).getId()), String.valueOf(movielist.get(position).getImageurl()), imageView);
 
-        if (movielist.get(position).getPay() != "0") {
+        if (movielist.get(position).getPay().equals("0")) {
             vip.setVisibility(View.GONE);
-
 
         }
 

@@ -5,12 +5,13 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ico"
-        android:label="13站"
+        android:label="信院影视"
         android:supportsRtl="true"
 
 
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +21,11 @@
 
         <activity android:name=".Play" />
         <activity android:name=".Movie_view"></activity>
-        <activity android:name=".PlayPlay" android:configChanges="keyboardHidden|orientation|screenSize"></activity>
-
+        <activity
+            android:name=".PlayPlay"
+            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
+        <activity android:name=".Login"></activity>
+        <activity android:name=".Webview"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -30,8 +34,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"
-                ></meta-data>
+                android:resource="@xml/file_paths"></meta-data>
 
 
         </provider>

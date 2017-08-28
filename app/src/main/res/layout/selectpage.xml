@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    >
 
     <TextView
-        android:text="xuanji"
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="选集"
+        android:textSize="30sp" />
 
-    <GridView
-        android:id="@+id/line"
-        android:numColumns="auto_fit"
-        android:layout_width="match_parent"
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></Spinner>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+    android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </GridView>
 
-
-    <GridView
-        android:id="@+id/selectpage"
-        android:layout_width="match_parent"
-        android:numColumns="auto_fit"
-        android:layout_height="wrap_content"></GridView>
-
-
-
-
-
-
-
+    </android.support.v7.widget.RecyclerView>
 
 
 

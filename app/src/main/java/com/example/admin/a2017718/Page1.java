@@ -32,7 +32,7 @@ public class Page1 extends Fragment {
 
 
                 Intent intent = new Intent(getActivity(), PlayPlay.class);
-                intent.putExtra("type","1");
+                intent.putExtra("type","offline");
                 intent.putExtra("id", String.valueOf(Movie_view.movielist.get(position).getId()));
                 startActivity(intent);
 

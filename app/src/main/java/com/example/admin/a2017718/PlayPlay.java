@@ -3,8 +3,6 @@ package com.example.admin.a2017718;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,8 +30,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -41,8 +37,6 @@ import java.util.TimerTask;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
-
-import static android.R.attr.id;
 
 /**
  * Created by admin on 2017/7/24.
@@ -52,19 +46,17 @@ public class PlayPlay extends AppCompatActivity {
 
     public static List<parts> parts = new ArrayList<>();
     public static List<String> infometion = new ArrayList<>();
+    public static List<String> lists = new ArrayList<>();
     public static List<String> qq = new ArrayList<>();
     public static List<String> youku = new ArrayList<>();
     public static List<String> sohu = new ArrayList<>();
     public static List<String> imgo = new ArrayList<>();
-    public static List<String> leshi = new ArrayList<>();
-    public static List<String> huashu = new ArrayList<>();
-
+    public static List<CharSequence> list = new ArrayList<>();
     RecyclerView recyclerView;
-
     private static final String TAG = "ijkvideo";
     private ImageButton fullButton;
     private TextView mTitleText;
-    private com.example.admin.ijkplayer.IjkVideoView mVideoView = null;
+    public static com.example.admin.ijkplayer.IjkVideoView mVideoView = null;
     private int mWidth, mHeight, mLeft, mTop;
     private ImageButton playButton;
     private SeekBar seekBar;
@@ -72,72 +64,29 @@ public class PlayPlay extends AppCompatActivity {
     RelativeLayout relativeLayout;
     public GestureDetector mGestureDetector;
     TextView playtime;
-
     private ListView listView;
-
+    public static String type;
+    private boolean isFull = false;
+    //public static boolean vip=false;
+    public static String account=null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contantlist);
 
-
-        Button button= (Button) findViewById(R.id.test1);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setVideoUrl("http://7xk12c.media1.z0.glb.clouddn.com/H256720P30.mp4");
-                start();
-
-            }
-        });
-
-
-        Intent intent=getIntent();
-
+        Intent intent = getIntent();
         initView();
         createPlayer();
-
-        if(intent.getStringExtra("type")=="1")
-        {
-
-
-
-
-
-
-
-
-
-
-
+        type = intent.getStringExtra("type");
+        Log.e("play_type", type);
+        if (type.equals("offline")) {
+            new offlinemovie().execute(intent.getStringExtra("id"));
+        } else {
+            new onlinemovie().execute(intent.getStringExtra("url"));
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     private void initView() {
@@ -161,9 +110,8 @@ public class PlayPlay extends AppCompatActivity {
         mPlayTop = (LinearLayout) findViewById(R.id.play_top);
         mPlayController = (LinearLayout) findViewById(R.id.play_controller);
         mTitleText = (TextView) findViewById(R.id.play_title);
-        playtime= (TextView) findViewById(R.id.playtime);
-        listView= (ListView) findViewById(R.id.playlistview);
-
+        playtime = (TextView) findViewById(R.id.playtime);
+        listView = (ListView) findViewById(R.id.playlistview);
 
 
         LinearLayout.LayoutParams rllp = new LinearLayout.LayoutParams(mWidth, mHeight);
@@ -223,7 +171,7 @@ public class PlayPlay extends AppCompatActivity {
         mVideoView.setOnInfoListener(new IMediaPlayer.OnInfoListener() {
             @Override
             public boolean onInfo(IMediaPlayer iMediaPlayer, int i, int i1) {
-                Log.e("INFO",i+"");
+                Log.e("INFO", i + "");
                 if (i == IMediaPlayer.MEDIA_INFO_AUDIO_RENDERING_START) {
                     allTime = mVideoView.getDuration();
                     Timer timer = new Timer();
@@ -248,14 +196,12 @@ public class PlayPlay extends AppCompatActivity {
         });
     }
 
-    private boolean isFull = false;
 
     public void setTitle(String str) {
         mTitleText.setText(str);
     }
 
     public void fullScreen() {
-        Log.e("full","A");
         show();
         if (isFull) {
             WindowManager.LayoutParams attr = getWindow().getAttributes();
@@ -318,19 +264,13 @@ public class PlayPlay extends AppCompatActivity {
             switch (msg.arg1) {
                 case IMediaPlayer.MEDIA_INFO_AUDIO_RENDERING_START: {
                     int nowTime = mVideoView.getCurrentPosition();
-                    playtime.setText(timeLengthToTime(nowTime)+"/"+timeLengthToTime(allTime));
+                    playtime.setText(timeLengthToTime(nowTime) + "/" + timeLengthToTime(allTime));
                     if (!isClick) {
                         int value = (int) Math.floor(((double) nowTime / (double) allTime) * 100);
                         seekBar.setProgress(value);
                     }
                     break;
                 }
-
-
-
-
-
-
 
 
             }
@@ -353,7 +293,6 @@ public class PlayPlay extends AppCompatActivity {
     }
 
     private String int2str(int value) {
-        Log.e("int2str", "1");
         String ret = String.valueOf(value);
         while (ret.length() < 2) {
             ret = "0" + ret;
@@ -396,7 +335,6 @@ public class PlayPlay extends AppCompatActivity {
     }
 
     public boolean isShowing() {
-        Log.e("isshow", "1");
         if (delay > 0) {
             return true;
         }
@@ -461,76 +399,18 @@ public class PlayPlay extends AppCompatActivity {
     }
 
 
-    class getdata extends AsyncTask<Object, Void, Void> {
-
-
-        @Override
-        protected Void doInBackground(Object... params) {
-            id = params[0].toString();
-
-            String data = new gethttpcontent().return_contant("http://s.icodef.com/user/movie/volume?vid=" + id);
-
-
-            try {
-                JSONObject jsonObject = new JSONObject(data);
-                JSONObject jsonObject1 = jsonObject.getJSONObject("rows");
-                namecontent = jsonObject1.getString("name");
-                markcontent = jsonObject1.getString("mark");
-                timecontent = jsonObject1.getString("release_time");
-                introductioncontent = jsonObject1.getString("introduction");
-                typeconent = jsonObject1.getString("type");
-
-                JSONArray jsonArray = jsonObject1.getJSONArray("part");
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject2 = jsonArray.getJSONObject(i);
-                    parts.add(new parts(jsonObject2.getString("name"), jsonObject2.getString("url")));
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            recyclerView.setAdapter(contentrecyclerviewAdapter);
-            name.setText("名称：" + namecontent);
-            mark.setText("豆瓣评分：" + markcontent);
-            time.setText("上映时间：" + timecontent);
-            introduction.setText("简介：" + introductioncontent);
-            type.setText("影片类型：" + typeconent);
-
-            try {
-                Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(getFilesDir() + "/" + id + ".jpg"));
-                head.setImageBitmap(bitmap);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-    }
-
-
-    class getdate extends AsyncTask<String,Void,Void>
-    {
+    class onlinemovie extends AsyncTask<String, Void, Void> {
         JSONObject jsonObject;
-        JSONObject rows;
+        JSONObject rows = null;
 
         @Override
         protected Void doInBackground(String... params) {
 
 
-            String str= new gethttpcontent().return_contant("http://video.visha.cc/search/volume?url="+params[0]);
+            String str = new gethttpcontent().return_contant("http://video.visha.cc/search/volume?url=" + params[0]);
 
             try {
-                jsonObject=new JSONObject(str);
+                jsonObject = new JSONObject(str);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -549,99 +429,200 @@ public class PlayPlay extends AppCompatActivity {
 
 
             try {
-                rows=jsonObject.getJSONObject("rows");
+                rows = jsonObject.getJSONObject("rows");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if (rows == null) {
+                return null;
+            }
+
+            list.clear();
+
+            if (rows.has("qq")) {
+                list.add("腾讯");
+
+                try {
+                    if (type.equals("teleplay")) {
+                        JSONArray jsonArray = rows.getJSONArray("qq");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            qq.add(jsonObject.getString("url"));
+                        }
+                    }
+
+                    if (type.equals("movie")) {
+
+                        JSONObject jsonObject = rows.getJSONObject("qq");
+                        qq.add(jsonObject.getString("url"));
+
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            if (rows.has("youku")) {
+
+                list.add("优酷");
+
+                try {
+
+                    if (type.equals("teleplay")) {
+                        JSONArray jsonArray = rows.getJSONArray("youku");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            youku.add(jsonObject.getString("url"));
+
+                        }
+
+                    }
+
+
+                    if (type.equals("movie")) {
+
+                        JSONObject jsonObject = rows.getJSONObject("youku");
+                        youku.add(jsonObject.getString("url"));
+
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (rows.has("sohu")) {
+                list.add("搜狐");
+                try {
+
+
+                    if (type.equals("teleplay")) {
+                        JSONArray jsonArray = rows.getJSONArray("sohu");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            sohu.add(jsonObject.getString("url"));
+
+                        }
+
+                    }
+
+                    if (type.equals("movie")) {
+
+                        JSONObject jsonObject = rows.getJSONObject("sohu");
+                        sohu.add(jsonObject.getString("url"));
+
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+            if (rows.has("imgo")) {
+                list.add("芒果");
+
+
+                try {
+
+                    if (type.equals("teleplay")) {
+                        JSONArray jsonArray = rows.getJSONArray("imgo");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            imgo.add(jsonObject.getString("url"));
+                        }
+                    }
+
+                    if (type.equals("movie")) {
+
+                        JSONObject jsonObject = rows.getJSONObject("imgo");
+                        imgo.add(jsonObject.getString("url"));
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+            for (int i = 0; i < list.size(); i++) {
+                Log.e("qq", (String) list.get(i));
+
+
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            listView.setAdapter(new plaplay_online_adapter(PlayPlay.this));
+        }
+    }
+
+    class offlinemovie extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+
+            String string = new gethttpcontent().return_contant("http://s.icodef.com/user/movie/volume?vid=" + params[0]);
+            Log.e("str", string);
+            JSONObject jsonObject = null;
+            JSONObject rows = null;
+            try {
+                jsonObject = new JSONObject(string);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                rows = jsonObject.getJSONObject("rows");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                infometion.add(rows.getString("name"));
+                infometion.add(rows.getString("mark"));
+                infometion.add(rows.getString("introduction"));
+                infometion.add(rows.getString("release_time"));
+                infometion.add(rows.getString("pay"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            JSONArray part = null;
+            try {
+                part = rows.getJSONArray("part");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
 
-            try {
-                if(rows.getJSONObject("qq")!=null)
-                {
+            for (int i = 0; i < part.length(); i++) {
+                try {
+                    JSONObject part1 = part.getJSONObject(i);
+                    lists.add(part1.getString("url"));
 
-                    JSONArray jsonArray=rows.getJSONArray("qq");
-
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-
-                        JSONObject jsonObject=jsonArray.getJSONObject(i);
-                        qq.add(jsonObject.getString("url"));
-
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                if(rows.getJSONObject("youku")!=null)
-                {
-
-                    JSONArray jsonArray=rows.getJSONArray("youku");
-
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-
-                        JSONObject jsonObject=jsonArray.getJSONObject(i);
-                        youku.add(jsonObject.getString("url"));
-
-                    }
-                }
-                if(rows.getJSONObject("sohu")!=null)
-                {
-
-                    JSONArray jsonArray=rows.getJSONArray("sohu");
-
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-
-                        JSONObject jsonObject=jsonArray.getJSONObject(i);
-                        sohu.add(jsonObject.getString("url"));
-
-                    }
-                }
-                if(rows.getJSONObject("imgo")!=null)
-                {
-
-                    JSONArray jsonArray=rows.getJSONArray("imgo");
-
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-
-                        JSONObject jsonObject=jsonArray.getJSONObject(i);
-                        imgo.add(jsonObject.getString("url"));
-
-                    }
-                }
-                if(rows.getJSONObject("leshi")!=null)
-                {
-
-                    JSONArray jsonArray=rows.getJSONArray("leshi");
-
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-
-                        JSONObject jsonObject=jsonArray.getJSONObject(i);
-                        leshi.add(jsonObject.getString("url"));
-
-                    }
-                }
-
-                if(rows.getJSONObject("huashu")!=null)
-                {
-
-                    JSONArray jsonArray=rows.getJSONArray("huashu");
-
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-
-                        JSONObject jsonObject=jsonArray.getJSONObject(i);
-                        huashu.add(jsonObject.getString("url"));
-
-                    }
-                }
-
-
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
 
 
@@ -652,37 +633,40 @@ public class PlayPlay extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+
+            listView.setAdapter(new palyplay_offline_adapter(PlayPlay.this));
+
+
         }
     }
 
-
-
-
-
-
-
-
-
-
-
     @Override
     public void onBackPressed() {
+        if (isFull) {
+            fullScreen();
+        } else {
+            infometion.clear();
+            lists.clear();
+            qq.clear();
+            youku.clear();
+            imgo.clear();
+            sohu.clear();
+            finish();
+            super.onBackPressed();
+        }
 
-        //super.onBackPressed();
+
     }
-
-
-
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(mVideoView.isPlaying()) {
+        if (mVideoView.isPlaying()) {
             pause();
         }
 
     }
-
 
     @Override
     protected void onRestart() {

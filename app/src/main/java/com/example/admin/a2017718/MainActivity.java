@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         builder=new AlertDialog.Builder(MainActivity.this);
 
-        startActivity(new Intent(MainActivity.this, PlayPlay.class));
+        startActivity(new Intent(MainActivity.this, Movie_view.class));
         finish();
 
 

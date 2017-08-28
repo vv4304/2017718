@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">#f77496</item>
+        <item name="android:statusBarColor">#009ecd</item>
     </style>
 
 </resources>
