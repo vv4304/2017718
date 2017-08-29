@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ico"
+        android:icon="@drawable/logo"
         android:label="信院影视"
         android:supportsRtl="true"
 
