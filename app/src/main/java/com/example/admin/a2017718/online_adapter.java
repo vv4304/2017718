@@ -248,9 +248,8 @@ public class online_adapter extends BaseAdapter {
 
 
             Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
+
             imageView.setImageBitmap(bitmap);
-
-
         }
 
 
@@ -258,3 +257,6 @@ public class online_adapter extends BaseAdapter {
 
 
 }
+
+
+

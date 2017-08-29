@@ -72,10 +72,20 @@ public class Movie_view extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metric);
 
         new update().execute("http://s.icodef.com/user/api/update");
-        new login().execute();
+
+        builder = new AlertDialog.Builder(Movie_view.this);
         context = getApplication();
         viewfrist();
         button();
+
+
+
+    }
+
+    public void frist()
+    {
+
+        new login().execute();
         movie_adapter = new movie_adapter(Movie_view.this);
         tvdrama_adapter = new tvdrama_adapter(Movie_view.this);
         online_adapter = new online_adapter(Movie_view.this);
@@ -86,31 +96,7 @@ public class Movie_view extends AppCompatActivity {
         fragments.add(new Page3());
 
 
-        account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ACCOUNT == null) {
-                    Intent intent = new Intent(Movie_view.this, Login.class);
-                    startActivity(intent);
-                }else {
-                    VIP=false;
-                    ACCOUNT=null;
-                    account.setText("点击登录");
-                    vip.setText("开通VIP");
-                }
 
-            }
-        });
-        vip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent=new Intent(Movie_view.this,Webview.class);
-                intent.putExtra("url","https://www.baidu.com");
-                startActivity(intent);
-
-            }
-        });
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), fragments));
@@ -136,7 +122,9 @@ public class Movie_view extends AppCompatActivity {
 
             }
         });
-        builder = new AlertDialog.Builder(Movie_view.this);
+
+
+
 
 
     }
@@ -159,7 +147,6 @@ public class Movie_view extends AppCompatActivity {
             }
         });
 
-
         Button button2 = (Button) findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +162,33 @@ public class Movie_view extends AppCompatActivity {
             }
         });
 
+        account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ACCOUNT == null) {
+                    Intent intent = new Intent(Movie_view.this, Login.class);
+                    startActivity(intent);
+                } else {
+                    VIP = false;
+                    ACCOUNT = null;
+                    account.setText("点击登录");
+                    vip.setText("开通VIP");
+                }
+
+            }
+        });
+        vip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Movie_view.this, Webview.class);
+                intent.putExtra("url", "https://www.baidu.com");
+                startActivity(intent);
+
+            }
+        });
+
+
 
     }
 
@@ -184,12 +198,10 @@ public class Movie_view extends AppCompatActivity {
         layoutParams.width = metric.widthPixels / 3;
         layoutParams.height = metric.heightPixels / 300;
         line1.setLayoutParams(layoutParams);
-
         LinearLayout bar = (LinearLayout) findViewById(R.id.bar);
         LinearLayout.LayoutParams layoutParams1 = (LinearLayout.LayoutParams) bar.getLayoutParams();
         layoutParams1.height = metric.heightPixels / 12;
         bar.setLayoutParams(layoutParams1);
-
     }
 
     public static Handler handler = new Handler() {
@@ -197,19 +209,14 @@ public class Movie_view extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
             account.setText(msg.getData().getString("account"));
             ACCOUNT = msg.getData().getString("account");
             Log.e("VIP", VIP.toString());
             if (VIP == true) {
                 vip.setText("VIP");
-            } else {
             }
-
-
         }
     };
-
 
     @Override
     public void onBackPressed() {
@@ -222,7 +229,6 @@ public class Movie_view extends AppCompatActivity {
         }
 
     }
-
 
     class update extends AsyncTask<String, Void, Integer> {
 
@@ -332,21 +338,15 @@ public class Movie_view extends AppCompatActivity {
                 return 1;
             }
             return 0;
-
         }
 
 
         @Override
         protected void onPostExecute(Integer aVoid) {
             super.onPostExecute(aVoid);
-
             if (aVoid == 0) {
-
-
                 new update_text().execute();
             }
-
-
         }
 
         Handler handler = new Handler() {
@@ -381,17 +381,17 @@ public class Movie_view extends AppCompatActivity {
 
     class update_text extends AsyncTask<Void, Void, Void> {
 
-        String str = "aaa\n这是版本二";
+        String str = "同志今天更新了邹钦与七个小矮人的故事\n今天是服务器正常运气第99999天";
 
 
         @Override
         protected Void doInBackground(Void... params) {
 
             handler.sendEmptyMessage(1);
-
-
             return null;
         }
+
+
 
         Handler handler = new Handler() {
 
@@ -424,6 +424,11 @@ public class Movie_view extends AppCompatActivity {
         };
 
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            frist();
+        }
     }
 
     class login extends AsyncTask<Void, Void, Boolean> {

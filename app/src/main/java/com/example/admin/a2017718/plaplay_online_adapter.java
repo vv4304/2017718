@@ -412,6 +412,12 @@ public class plaplay_online_adapter extends BaseAdapter {
 
                         if (Movie_view.VIP == true) {
                             new loadurl().execute(position);
+                        } else {
+                            Intent intent = new Intent(context, Webview.class);
+                            intent.putExtra("url", "https://www.baidu.com");
+                            context.startActivity(intent);
+
+
                         }
 
                     } else {

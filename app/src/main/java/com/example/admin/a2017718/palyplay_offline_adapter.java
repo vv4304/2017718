@@ -22,10 +22,10 @@ import java.util.List;
 public class palyplay_offline_adapter extends BaseAdapter {
 
     Context context;
-    public palyplay_offline_adapter(Context context)
-    {
 
-        this.context=context;
+    public palyplay_offline_adapter(Context context) {
+
+        this.context = context;
 
 
     }
@@ -48,11 +48,10 @@ public class palyplay_offline_adapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(position==0)
-        {
+        if (position == 0) {
 
-            convertView= LayoutInflater.from(context).inflate(R.layout.head,parent,false);
-            TextView name= (TextView) convertView.findViewById(R.id.name);
+            convertView = LayoutInflater.from(context).inflate(R.layout.head, parent, false);
+            TextView name = (TextView) convertView.findViewById(R.id.name);
             TextView number = (TextView) convertView.findViewById(R.id.number);
             TextView type = (TextView) convertView.findViewById(R.id.type);
 
@@ -60,40 +59,30 @@ public class palyplay_offline_adapter extends BaseAdapter {
             type.setText(PlayPlay.infometion.get(1) + "." + PlayPlay.infometion.get(3));
 
 
-
-
         }
 
 
-
-        if(position==1)
-        {
-
+        if (position == 1) {
             convertView = LayoutInflater.from(context).inflate(R.layout.selectpage, parent, false);
             RecyclerView recyclerView = (RecyclerView) convertView.findViewById(R.id.recyclerview);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             recyclerView.setLayoutManager(linearLayoutManager);
-            Henadatpter henadatpter=new Henadatpter(PlayPlay.lists);
+            Henadatpter henadatpter = new Henadatpter(PlayPlay.lists);
             recyclerView.setAdapter(henadatpter);
         }
 
 
-        if(position==2)
-        {
-            convertView= LayoutInflater.from(context).inflate(R.layout.introduction,parent,false);
-            TextView introduction= (TextView) convertView.findViewById(R.id.introduction);
+        if (position == 2) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.introduction, parent, false);
+            TextView introduction = (TextView) convertView.findViewById(R.id.introduction);
             introduction.setText(PlayPlay.infometion.get(2));
 
         }
 
 
-
-
         return convertView;
     }
-
-
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -106,6 +95,7 @@ public class palyplay_offline_adapter extends BaseAdapter {
         }
 
     }
+
     class Henadatpter extends RecyclerView.Adapter<MyViewHolder> {
 
 
@@ -138,13 +128,18 @@ public class palyplay_offline_adapter extends BaseAdapter {
                         if (Movie_view.VIP == true) {
                             PlayPlay.mVideoView.setVideoPath(PlayPlay.lists.get(position));
                             PlayPlay.mVideoView.start();
+                        } else {
+
+                            Intent intent = new Intent(context, Webview.class);
+                            intent.putExtra("url", "https://www.baidu.com");
+                            context.startActivity(intent);
+
                         }
 
                     } else {
                         Intent intent = new Intent(context, Login.class);
                         context.startActivity(intent);
                     }
-
 
 
                 }
@@ -158,14 +153,6 @@ public class palyplay_offline_adapter extends BaseAdapter {
             return str.size();
         }
     }
-
-
-
-
-
-
-
-
 
 
 }
