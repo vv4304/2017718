@@ -7,8 +7,6 @@
         android:icon="@drawable/logo"
         android:label="信院影视"
         android:supportsRtl="true"
-
-
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
@@ -18,14 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".Play" />
-        <activity android:name=".Movie_view"></activity>
-        <activity
-            android:name=".PlayPlay"
-            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
-        <activity android:name=".Login"></activity>
-        <activity android:name=".Webview"></activity>
+        <activity android:name=".Movie_view"/>
+        <activity  android:name=".PlayPlay" android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".Login"/>
+        <activity android:name=".Webview"/>
+        <activity android:name=".Setting"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -35,10 +31,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
-
-
         </provider>
-
     </application>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 

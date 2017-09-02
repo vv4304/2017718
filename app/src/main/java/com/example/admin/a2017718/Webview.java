@@ -45,7 +45,6 @@ public class Webview extends AppCompatActivity {
                 super.onProgressChanged(view, newProgress);
                 if(newProgress ==100){
                     progressBar.setVisibility(View.GONE);
-                    //progressBar.setProgress(newProgress);
                 }else {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgress(newProgress);//设置加载进度

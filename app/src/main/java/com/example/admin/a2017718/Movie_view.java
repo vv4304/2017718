@@ -139,6 +139,23 @@ public class Movie_view extends AppCompatActivity {
     }
 
     public void button() {
+
+
+        ImageView setting = (ImageView) findViewById(R.id.setting);
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent=new Intent(Movie_view.this,Setting.class);
+                startActivity(intent);
+
+            }
+        });
+
+
+
+
+
         Button button1 = (Button) findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override

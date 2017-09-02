@@ -5,32 +5,34 @@
     android:fitsSystemWindows="true"
     >
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#009ecd"
-        >
+        android:background="#009ecd">
+
         <ImageView
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/back"
-            />
+            android:src="@drawable/back" />
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progressBar"
+    <Button
+        android:text="清理空间"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-
-        style="@android:style/Widget.ProgressBar.Horizontal"
-        />
-
-    <WebView
-        android:id="@+id/webview"
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="联系Q群：2333333333"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_x="0dp"
-        android:layout_y="-50dp" />
+        android:layout_height="wrap_content" />
+    <Button
+        android:text="当前版本：2.0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+
 </LinearLayout>

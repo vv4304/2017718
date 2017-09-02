@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -41,6 +42,13 @@ public class Login extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
         Button login = (Button) findViewById(R.id.login);
         Button register = (Button) findViewById(R.id.register);
+        ImageView back= (ImageView) findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
