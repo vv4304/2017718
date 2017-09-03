@@ -130,20 +130,19 @@ public class locallogin {
                 e.printStackTrace();
             }
 
-            if(out==null){return false;}
+            if (out == null) {
+                return false;
+            }
             try {
                 out.write(data.getBytes());
                 out.close();
             } catch (IOException e) {
-                Log.e("login","写入失败");
+                Log.e("login", "写入失败");
             }
 
 
             try {
                 if (http.getResponseCode() == 200) {
-                    Log.e("login", "ljcg");
-
-
                     InputStream in = http.getInputStream();
                     String str = new gethttpcontent().readstream(in);
                     Log.e("aaa", str);
@@ -172,18 +171,18 @@ public class locallogin {
 
                         if (login != null) {
 
-                            Log.e("aa",login);
+                            Log.e("aa", login);
                             if (login.indexOf(jsonobject.getString("account")) != -1) {
                                 Movie_view.ACCOUNT = jsonobject.getString("account");
                                 if (login.indexOf("网络VIP1") != -1) {
-                                    Log.e("VIP","true");
+                                    Log.e("VIP", "true");
                                     Movie_view.VIP = true;
                                 }
 
 
                                 Message msg = new Message();
                                 Bundle bundle = new Bundle();
-                                bundle.putString("account",jsonobject.getString("account"));
+                                bundle.putString("account", jsonobject.getString("account"));
                                 msg.setData(bundle);
                                 Movie_view.handler.sendMessage(msg);
                             }

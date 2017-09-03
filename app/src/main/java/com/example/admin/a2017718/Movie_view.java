@@ -1,6 +1,7 @@
 package com.example.admin.a2017718;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -42,7 +43,6 @@ import java.util.List;
 /**
  * Created by admin on 2017/7/19.
  */
-
 public class Movie_view extends AppCompatActivity {
     int i = 1;
     public static List<movies> movielist = new ArrayList<>();
@@ -71,20 +71,16 @@ public class Movie_view extends AppCompatActivity {
         metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
 
-        new update().execute("http://s.icodef.com/user/api/update");
-
+        new online().execute();
         builder = new AlertDialog.Builder(Movie_view.this);
         context = getApplication();
         viewfrist();
         button();
 
 
-
     }
 
-    public void frist()
-    {
-
+    public void frist() {
         new login().execute();
         movie_adapter = new movie_adapter(Movie_view.this);
         tvdrama_adapter = new tvdrama_adapter(Movie_view.this);
@@ -96,8 +92,6 @@ public class Movie_view extends AppCompatActivity {
         fragments.add(new Page3());
 
 
-
-
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), fragments));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -107,9 +101,6 @@ public class Movie_view extends AppCompatActivity {
                 LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) line1.getLayoutParams();
                 lp.leftMargin = (int) (positionOffset * metric.widthPixels / 3) + metric.widthPixels / 3 * position;
                 line1.setLayoutParams(lp);
-                Log.e("SS", String.valueOf(position + "/" + positionOffset));
-
-
             }
 
             @Override
@@ -124,18 +115,6 @@ public class Movie_view extends AppCompatActivity {
         });
 
 
-
-
-
-    }
-
-
-    public void filelist() {
-        String[] strings = fileList();
-        for (int i = 0; i < strings.length; i++) {
-            Log.e("list:", strings[i]);
-        }
-
     }
 
     public void button() {
@@ -146,14 +125,11 @@ public class Movie_view extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent=new Intent(Movie_view.this,Setting.class);
+                Intent intent = new Intent(Movie_view.this, Setting.class);
                 startActivity(intent);
 
             }
         });
-
-
-
 
 
         Button button1 = (Button) findViewById(R.id.button1);
@@ -206,7 +182,6 @@ public class Movie_view extends AppCompatActivity {
         });
 
 
-
     }
 
     public void viewfrist() {
@@ -248,7 +223,6 @@ public class Movie_view extends AppCompatActivity {
     }
 
     class update extends AsyncTask<String, Void, Integer> {
-
 
         @Override
         protected Integer doInBackground(String... params) {
@@ -395,19 +369,25 @@ public class Movie_view extends AppCompatActivity {
 
     }
 
-
     class update_text extends AsyncTask<Void, Void, Void> {
 
-        String str = "同志今天更新了邹钦与七个小矮人的故事\n今天是服务器正常运气第99999天";
-
+        String str;
 
         @Override
         protected Void doInBackground(Void... params) {
 
-            handler.sendEmptyMessage(1);
+            try {
+                JSONObject jsonObject = new JSONObject(new gethttpcontent().return_contant("http://s.icodef.com/index/api/notice_m"));
+                str = jsonObject.getString("msg");
+
+                handler.sendEmptyMessage(1);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return null;
         }
-
 
 
         Handler handler = new Handler() {
@@ -427,14 +407,10 @@ public class Movie_view extends AppCompatActivity {
                             alertDialog.dismiss();
                         }
                     });
-
-
                     builder.setView(view);
                     builder.setCancelable(false);
                     alertDialog = builder.create();
                     alertDialog.show();
-
-
                 }
 
             }
@@ -472,5 +448,49 @@ public class Movie_view extends AppCompatActivity {
         }
     }
 
+    class online extends AsyncTask<Object, Object, Boolean> {
+        @Override
+        protected Boolean doInBackground(Object... params) {
 
+            String test = new gethttpcontent().return_contant("http://s.icodef.com/");
+            Log.e("aaa", test);
+            if (test.equals("ERROR")) {
+                handler.sendEmptyMessage(1);
+            } else {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aVoid) {
+            super.onPostExecute(aVoid);
+            if (aVoid == true) {
+                new update().execute("http://s.icodef.com/user/api/update");
+            }
+        }
+
+        Handler handler = new Handler() {
+
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 1) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Movie_view.this);
+                    alertDialogBuilder.setMessage("请连接校园网WIFI\"HNIU\"！");
+                    alertDialogBuilder.setCancelable(false);
+                    alertDialogBuilder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+
+            }
+        };
+
+
+    }
 }

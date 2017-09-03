@@ -42,7 +42,7 @@ public class Login extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
         Button login = (Button) findViewById(R.id.login);
         Button register = (Button) findViewById(R.id.register);
-        ImageView back= (ImageView) findViewById(R.id.back);
+        ImageView back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +95,6 @@ public class Login extends AppCompatActivity {
                 if (http.getResponseCode() == 200) {
 
 
-
                     InputStream in = http.getInputStream();
                     String str = new gethttpcontent().readstream(in);
                     JSONObject json = new JSONObject(str);
@@ -111,7 +110,6 @@ public class Login extends AppCompatActivity {
                         getuser.setRequestMethod("GET");
                         getuser.setConnectTimeout(5000);
                         String login = new gethttpcontent().readstream(getuser.getInputStream());
-
 
 
                         if (login != null) {
@@ -154,7 +152,7 @@ public class Login extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("dada",s);
+            Log.e("dada", s);
 
 
             if (s.equals("登陆成功")) {
@@ -185,7 +183,7 @@ public class Login extends AppCompatActivity {
             URL url = null;
             OutputStream out = null;
             HttpURLConnection http = null;
-            String data = "user=" + params[0] + "&pwd=" + params[1] + "&email=zqzz%40qq.com&inv_code=af3z1z";
+            String data = "user=" + params[0] + "&pwd=" + params[1] + "&email=zqzz%40qq.com";
 
 
             try {

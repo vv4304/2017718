@@ -381,7 +381,6 @@ public class PlayPlay extends AppCompatActivity {
     }
 
     private void sleepHide() {
-        Log.e("slepp", "1");
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 if (delay > 0) {
@@ -397,7 +396,6 @@ public class PlayPlay extends AppCompatActivity {
             }
         }, 1000);
     }
-
 
     class onlinemovie extends AsyncTask<String, Void, Void> {
         JSONObject jsonObject;

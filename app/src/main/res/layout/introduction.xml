@@ -6,29 +6,16 @@
     android:paddingRight="10dp"
     >
 
-
-
     <TextView
         android:layout_width="match_parent"
-        android:text="jianjie"
+        android:text="影片简介:"
+        android:textSize="20dp"
         android:layout_height="wrap_content" />
-
 
     <TextView
         android:id="@+id/introduction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-
-
-
-
-
-
-
-
-
-
-
 
 </LinearLayout>

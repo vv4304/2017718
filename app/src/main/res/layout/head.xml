@@ -6,15 +6,13 @@
     android:paddingRight="10dp"
     >
 
-
-
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="30dp"
         android:textColor="#FF4444"
-        android:text="1"
+        android:text="name"
 
         />
 
@@ -22,23 +20,14 @@
         android:id="@+id/type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="1"
+        android:text="type"
         />
 
     <TextView
         android:id="@+id/number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="1"
+        android:text="pay"
         />
-
-
-
-
-
-
-
-
-
 
 </LinearLayout>

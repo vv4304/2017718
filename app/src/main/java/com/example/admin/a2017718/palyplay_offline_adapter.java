@@ -24,10 +24,7 @@ public class palyplay_offline_adapter extends BaseAdapter {
     Context context;
 
     public palyplay_offline_adapter(Context context) {
-
         this.context = context;
-
-
     }
 
     @Override
@@ -52,11 +49,16 @@ public class palyplay_offline_adapter extends BaseAdapter {
 
             convertView = LayoutInflater.from(context).inflate(R.layout.head, parent, false);
             TextView name = (TextView) convertView.findViewById(R.id.name);
-            TextView number = (TextView) convertView.findViewById(R.id.number);
+            TextView pay = (TextView) convertView.findViewById(R.id.number);
             TextView type = (TextView) convertView.findViewById(R.id.type);
 
             name.setText(PlayPlay.infometion.get(0));
-            type.setText(PlayPlay.infometion.get(1) + "." + PlayPlay.infometion.get(3));
+            type.setText("豆瓣评分：" + PlayPlay.infometion.get(1) + "   " + "上映日期：" + PlayPlay.infometion.get(3));
+            if (PlayPlay.infometion.get(4).equals("1")) {
+                pay.setText("VIP免费观看");
+            } else {
+                pay.setText("免费观看");
+            }
 
 
         }
@@ -77,9 +79,7 @@ public class palyplay_offline_adapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.introduction, parent, false);
             TextView introduction = (TextView) convertView.findViewById(R.id.introduction);
             introduction.setText(PlayPlay.infometion.get(2));
-
         }
-
 
         return convertView;
     }
@@ -98,10 +98,7 @@ public class palyplay_offline_adapter extends BaseAdapter {
 
     class Henadatpter extends RecyclerView.Adapter<MyViewHolder> {
 
-
         View view;
-
-
         List<String> str = new ArrayList<>();
 
         public Henadatpter(List<String> str) {
@@ -125,16 +122,26 @@ public class palyplay_offline_adapter extends BaseAdapter {
                 public void onClick(View v) {
                     if (Movie_view.ACCOUNT != null) {
 
-                        if (Movie_view.VIP == true) {
-                            PlayPlay.mVideoView.setVideoPath(PlayPlay.lists.get(position));
-                            PlayPlay.mVideoView.start();
+
+                        if (PlayPlay.infometion.get(4).equals("1")) {
+
+                            if (Movie_view.VIP == true) {
+                                PlayPlay.mVideoView.setVideoPath(PlayPlay.lists.get(position));
+                                PlayPlay.mVideoView.start();
+                            } else {
+                                Intent intent = new Intent(context, Webview.class);
+                                intent.putExtra("url", "https://www.baidu.com");
+                                context.startActivity(intent);
+
+                            }
+
                         } else {
 
-                            Intent intent = new Intent(context, Webview.class);
-                            intent.putExtra("url", "https://www.baidu.com");
-                            context.startActivity(intent);
+                            PlayPlay.mVideoView.setVideoPath(PlayPlay.lists.get(position));
+                            PlayPlay.mVideoView.start();
 
                         }
+
 
                     } else {
                         Intent intent = new Intent(context, Login.class);
