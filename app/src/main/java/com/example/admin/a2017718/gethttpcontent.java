@@ -1,5 +1,7 @@
 package com.example.admin.a2017718;
 
+import android.util.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +22,9 @@ public class gethttpcontent {
         int code=0;
         try {
             httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
-            httpURLConnection.setReadTimeout(5000);
+            httpURLConnection.setConnectTimeout(3000);
+            httpURLConnection.setReadTimeout(3000);
+            httpURLConnection.setRequestProperty("Cookie", Movie_view.uid_token);
             httpURLConnection.setRequestMethod("GET");
 
         } catch (IOException e) {
@@ -34,10 +38,7 @@ public class gethttpcontent {
             e.printStackTrace();
         }
 
-
         if (code == 200) {
-
-
             try {
                 inputStream = httpURLConnection.getInputStream();
                 contant = readstream(inputStream);
@@ -52,11 +53,14 @@ public class gethttpcontent {
 
         } else {
             return "ERROR";
-
         }
 
 
     }
+
+
+
+
 
 
     public String readstream(InputStream inputStream) throws IOException {
