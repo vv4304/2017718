@@ -11,14 +11,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#009ecd"
-        >
+        android:background="#009ecd">
+
         <ImageView
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/back"
-            />
+            android:src="@drawable/back" />
 
     </LinearLayout>
 
@@ -37,7 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="帐号" />
+            android:text="帐号："
+            android:textColor="#441144" />
 
         <EditText
             android:id="@+id/account"
@@ -48,8 +48,8 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="12345789" />
+            android:hint="数字或字母"
+            android:inputType="textPersonName" />
 
     </LinearLayout>
 
@@ -62,7 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="密码" />
+            android:text="密码："
+            android:textColor="#441144" />
 
         <EditText
             android:id="@+id/password"
@@ -73,8 +74,35 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="123456789" />
+            android:hint="数字加字母"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="邮箱："
+            android:textColor="#441144" />
+
+        <EditText
+            android:id="@+id/emailedittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="列：123456789@qq.com"
+            android:inputType="textPersonName" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -86,17 +114,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="10dp"
             android:background="#FF8844"
             android:text="注册" />
 
-        <Button
-            android:id="@+id/login"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="#889895"
-
-            android:text="登录" />
 
     </LinearLayout>
-    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="20dp"
+        android:textColor="#886644"
+        android:text="点击切换到登录" />
+
+</LinearLayout>
