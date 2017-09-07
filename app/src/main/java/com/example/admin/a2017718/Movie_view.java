@@ -59,8 +59,9 @@ public class Movie_view extends AppCompatActivity {
     public static Context context;
     public static TextView account;
     public static TextView vip;
-    public static Boolean VIP = false;
+    public static Boolean VIP = true;
     public static String ACCOUNT = null;
+    public static String uid_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +176,7 @@ public class Movie_view extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(Movie_view.this, Webview.class);
-                intent.putExtra("url", "https://www.baidu.com");
+                intent.putExtra("url", "http://sv.icodef.com/VALLEY/vip.html");
                 startActivity(intent);
 
             }
@@ -224,9 +225,11 @@ public class Movie_view extends AppCompatActivity {
 
     class update extends AsyncTask<String, Void, Integer> {
 
+
         @Override
         protected Integer doInBackground(String... params) {
 
+            Log.e("dada","dada");
             PackageManager packageManager = getPackageManager();
             PackageInfo packageInfo = null;
             try {
@@ -237,6 +240,7 @@ public class Movie_view extends AppCompatActivity {
 
 
             String str = new gethttpcontent().return_contant(params[0]);
+            Log.e("version",str);
 
             JSONObject jsonObject = null;
             int version = 0;
@@ -251,6 +255,7 @@ public class Movie_view extends AppCompatActivity {
                 jsonObject = new JSONObject(str);
                 version = jsonObject.getInt("v");
                 url = jsonObject.getString("u");
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -372,12 +377,11 @@ public class Movie_view extends AppCompatActivity {
     class update_text extends AsyncTask<Void, Void, Void> {
 
         String str;
-
         @Override
         protected Void doInBackground(Void... params) {
 
             try {
-                JSONObject jsonObject = new JSONObject(new gethttpcontent().return_contant("http://s.icodef.com/index/api/notice_m"));
+                JSONObject jsonObject = new JSONObject(new gethttpcontent().return_contant("http://sv.icodef.com/index/api/notice_m"));
                 str = jsonObject.getString("msg");
 
                 handler.sendEmptyMessage(1);
@@ -452,21 +456,21 @@ public class Movie_view extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Object... params) {
 
-            String test = new gethttpcontent().return_contant("http://s.icodef.com/");
-            Log.e("aaa", test);
-            if (test.equals("ERROR")) {
+            String test = new gethttpcontent().return_contant("http://sv.icodef.com/");
+            if (test.equals("ERROR")||test.indexOf("我是首页")==-1) {
                 handler.sendEmptyMessage(1);
-            } else {
                 return true;
+            } else {
+                return false;
             }
-            return false;
+
         }
 
         @Override
         protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
             if (aVoid == true) {
-                new update().execute("http://s.icodef.com/user/api/update");
+                new update().execute("http://sv.icodef.com/index/api/update_m");
             }
         }
 
