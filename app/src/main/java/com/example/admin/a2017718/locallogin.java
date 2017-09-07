@@ -101,7 +101,7 @@ public class locallogin {
 
 
             try {
-                url = new URL("http://s.icodef.com/index/login/login");
+                url = new URL("http://sv.icodef.com/index/login/login");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -158,12 +158,12 @@ public class locallogin {
                         Log.e("login", "登录成功");
 
                         List<String> map = http.getHeaderFields().get("Set-Cookie");
-                        String uid_token = map.get(0).substring(0, map.get(0).indexOf(";")) + ";" + map.get(1).substring(0, map.get(1).indexOf(";"));
+                        Movie_view.uid_token = map.get(0).substring(0, map.get(0).indexOf(";")) + ";" + map.get(1).substring(0, map.get(1).indexOf(";"));
 
 
-                        URL url1 = new URL("http://s.icodef.com/user/index/index");
+                        URL url1 = new URL("http://sv.icodef.com/user/index/index");
                         HttpURLConnection getuser = (HttpURLConnection) url1.openConnection();
-                        getuser.setRequestProperty("Cookie", uid_token);
+                        getuser.setRequestProperty("Cookie", Movie_view.uid_token);
                         getuser.setDoInput(true);
                         getuser.setRequestMethod("GET");
                         getuser.setConnectTimeout(5000);

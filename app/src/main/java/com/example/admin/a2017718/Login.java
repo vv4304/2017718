@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -32,6 +34,7 @@ public class Login extends AppCompatActivity {
 
     EditText account;
     EditText password;
+    public static String uid_token;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,8 +43,10 @@ public class Login extends AppCompatActivity {
 
         account = (EditText) findViewById(R.id.account);
         password = (EditText) findViewById(R.id.password);
-        Button login = (Button) findViewById(R.id.login);
-        Button register = (Button) findViewById(R.id.register);
+        final TextView login = (TextView) findViewById(R.id.login);
+        final EditText emailedittext= (EditText) findViewById(R.id.emailedittext);
+        final LinearLayout email = (LinearLayout) findViewById(R.id.email);
+        final Button register = (Button) findViewById(R.id.register);
         ImageView back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,14 +58,21 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                new login().execute(account.getText().toString(), password.getText().toString());
+                register.setText("登录");
+                email.setVisibility(View.GONE);
+                login.setVisibility(View.GONE);
             }
         });
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new register().execute(account.getText().toString(), password.getText().toString());
+
+                if (register.getText().toString().equals("注册")) {
+                    new register().execute(account.getText().toString(), password.getText().toString(),emailedittext.getText().toString());
+                } else {
+                    new login().execute(account.getText().toString(), password.getText().toString());
+                }
+
             }
         });
 
@@ -77,7 +89,7 @@ public class Login extends AppCompatActivity {
             String data = "user=" + params[0] + "&pwd=" + params[1];
 
             try {
-                URL url = new URL("http://s.icodef.com/index/login/login");
+                URL url = new URL("http://sv.icodef.com/index/login/login");
                 HttpURLConnection http = (HttpURLConnection) url.openConnection();
                 http.setRequestMethod("POST");
                 http.setConnectTimeout(5000);
@@ -102,10 +114,10 @@ public class Login extends AppCompatActivity {
 
                     if (json.getString("msg").equals("登陆成功")) {
                         List<String> map = http.getHeaderFields().get("Set-Cookie");
-                        String uid_token = map.get(0).substring(0, map.get(0).indexOf(";")) + ";" + map.get(1).substring(0, map.get(1).indexOf(";"));
-                        URL url1 = new URL("http://s.icodef.com/user/index/index");
+                        Movie_view.uid_token = map.get(0).substring(0, map.get(0).indexOf(";")) + ";" + map.get(1).substring(0, map.get(1).indexOf(";"));
+                        URL url1 = new URL("http://sv.icodef.com/user/index/index");
                         HttpURLConnection getuser = (HttpURLConnection) url1.openConnection();
-                        getuser.setRequestProperty("Cookie", uid_token);
+                        getuser.setRequestProperty("Cookie", Movie_view.uid_token);
                         getuser.setDoInput(true);
                         getuser.setRequestMethod("GET");
                         getuser.setConnectTimeout(5000);
@@ -183,11 +195,11 @@ public class Login extends AppCompatActivity {
             URL url = null;
             OutputStream out = null;
             HttpURLConnection http = null;
-            String data = "user=" + params[0] + "&pwd=" + params[1] + "&email=zqzz%40qq.com";
+            String data = "user=" + params[0] + "&pwd=" + params[1] + "&email="+params[2];
 
 
             try {
-                url = new URL("http://s.icodef.com/index/login/register");
+                url = new URL("http://sv.icodef.com/index/login/register");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
