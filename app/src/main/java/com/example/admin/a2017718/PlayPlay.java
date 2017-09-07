@@ -1,8 +1,11 @@
 package com.example.admin.a2017718;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,11 +20,13 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -67,8 +72,16 @@ public class PlayPlay extends AppCompatActivity {
     private ListView listView;
     public static String type;
     private boolean isFull = false;
-    //public static boolean vip=false;
-    public static String account=null;
+    private myGestureListener mGesture;
+    RelativeLayout cap;
+
+
+    private int allTime;
+    RelativeLayout mViewLight;
+    ProgressBar barSound;
+    RelativeLayout mViewSound;
+    ProgressBar barLight;
+    public static ProgressBar loading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,6 +98,7 @@ public class PlayPlay extends AppCompatActivity {
         } else {
             new onlinemovie().execute(intent.getStringExtra("url"));
         }
+
 
     }
 
@@ -104,6 +118,21 @@ public class PlayPlay extends AppCompatActivity {
 
 
     public void createPlayer() {
+
+
+        mViewLight = (RelativeLayout) findViewById(R.id.view_light);
+        mViewLight.setVisibility(View.INVISIBLE);
+
+        barSound = (ProgressBar) findViewById(R.id.bar_sound);
+        cap = (RelativeLayout) findViewById(R.id.cap);
+
+        mViewSound = (RelativeLayout) findViewById(R.id.view_sound);
+        mViewSound.setVisibility(View.INVISIBLE);
+        barLight = (ProgressBar) findViewById(R.id.bar_light);
+        loading= (ProgressBar) findViewById(R.id.loading);
+        loading.setVisibility(View.INVISIBLE);
+
+
         seekBar = (SeekBar) findViewById(R.id.play_seekbar);
         relativeLayout = (RelativeLayout) findViewById(R.id.combineCtrl);
         mVideoView = (com.example.admin.ijkplayer.IjkVideoView) findViewById(R.id.video_view);
@@ -121,12 +150,18 @@ public class PlayPlay extends AppCompatActivity {
 
         hidden();
         toggleAspectRatio(1);
-        mGestureDetector = new GestureDetector(PlayPlay.this, new myGestureListener());
+
+
+        mGesture = new myGestureListener();
+        mGestureDetector = new GestureDetector(PlayPlay.this, mGesture);
 
 
         relativeLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == 1 && mGesture.isScroll) {//GestureDetector的onScroll竟然不会触发手指抬起事件,只好自己来实现了
+                    return mGesture.onSingleTapUp(motionEvent);
+                }
                 return mGestureDetector.onTouchEvent(motionEvent);
             }
         });
@@ -149,13 +184,14 @@ public class PlayPlay extends AppCompatActivity {
                 }
             }
         });
-        seekBar.setMax(100);
+        seekBar.setMax(10000);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 isClick = false;
-                int value = (int) Math.floor((double) allTime * ((double) seekBar.getProgress() / 100));
+                int value = (int) Math.floor((double) allTime * ((double) seekBar.getProgress() / 10000));
                 mVideoView.seekTo(value);
+
             }
 
             @Override
@@ -172,6 +208,10 @@ public class PlayPlay extends AppCompatActivity {
             @Override
             public boolean onInfo(IMediaPlayer iMediaPlayer, int i, int i1) {
                 Log.e("INFO", i + "");
+                if (i == 3) {
+                    setTitle("正在播放");
+                    cap.setVisibility(View.GONE);
+                }
                 if (i == IMediaPlayer.MEDIA_INFO_AUDIO_RENDERING_START) {
                     allTime = mVideoView.getDuration();
                     Timer timer = new Timer();
@@ -190,7 +230,7 @@ public class PlayPlay extends AppCompatActivity {
             @Override
             public void onCompletion(IMediaPlayer iMediaPlayer) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    playButton.setImageDrawable(mVideoView.getResources().getDrawable(R.drawable.vip, null));
+                    playButton.setImageDrawable(mVideoView.getResources().getDrawable(R.drawable.btn_full, null));
                 }
             }
         });
@@ -213,7 +253,7 @@ public class PlayPlay extends AppCompatActivity {
             }
             move(mLeft, mTop, mWidth, mHeight);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                fullButton.setImageDrawable(mVideoView.getResources().getDrawable(R.drawable.vip, null));
+                fullButton.setImageDrawable(mVideoView.getResources().getDrawable(R.drawable.btn_full, null));
             }
             isFull = false;
         } else {
@@ -230,7 +270,7 @@ public class PlayPlay extends AppCompatActivity {
 //            mViewHolder.setLayoutParams(rllp);
             move(0, 0, -1, -1);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                fullButton.setImageDrawable(mVideoView.getResources().getDrawable(R.drawable.vip, null));
+                fullButton.setImageDrawable(mVideoView.getResources().getDrawable(R.drawable.btn_mini, null));
             }
             isFull = true;
         }
@@ -258,7 +298,7 @@ public class PlayPlay extends AppCompatActivity {
         }
     }
 
-    private int allTime;
+
     private Handler mHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             switch (msg.arg1) {
@@ -266,7 +306,7 @@ public class PlayPlay extends AppCompatActivity {
                     int nowTime = mVideoView.getCurrentPosition();
                     playtime.setText(timeLengthToTime(nowTime) + "/" + timeLengthToTime(allTime));
                     if (!isClick) {
-                        int value = (int) Math.floor(((double) nowTime / (double) allTime) * 100);
+                        int value = (int) Math.floor(((double) nowTime / (double) allTime) * 10000);
                         seekBar.setProgress(value);
                     }
                     break;
@@ -303,19 +343,135 @@ public class PlayPlay extends AppCompatActivity {
     class myGestureListener extends GestureDetector.SimpleOnGestureListener {
         public myGestureListener() {
             super();
-            Log.e("mygestu", "1");
         }
 
+        private boolean isScroll = false;
+        private int nowTime = 0;
+
         @Override
-        public boolean onDown(MotionEvent event) {
+        public boolean onDown(MotionEvent event) {//手指按下
+            if (isShowing()) {
+                isClick = true;
+                delay = 5000;
+            }
             return true;
         }
 
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2,      //滑动事件
-                               float velocityX, float velocityY) {
-            return false;
+        public static final int TOUCH_NULL = -1;//啥都没
+        public static final int TOUCH_X = 0;//手指横向滑动
+        public static final int TOUCH_LEFT_Y = 1;//手指左边纵向滑动
+        public static final int TOUCH_RIGHT_Y = 2;//手指右边纵向滑动
+        public int Touch = TOUCH_NULL;
+        private int Progress = 0;//记录初始进度
+        private int delay = 0;
+
+        private void sleepHide(final View v) {
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    if (delay > 0) {
+                        if (Touch != TOUCH_NULL) {
+                            delay = 2000;
+                        } else {
+                            delay -= 1000;
+                        }
+                        sleepHide(v);
+                    } else {
+                        v.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }, 1000);
         }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {//手指在触摸屏上滑动
+            if (Touch == TOUCH_NULL) {
+                Touch = getTouch(e1.getX(), e1.getY(), e2.getX(), e2.getY());
+                isClick = true;
+                isScroll = true;
+                if (Touch == TOUCH_X) {
+                    Progress = seekBar.getProgress();
+                    nowTime = mVideoView.getCurrentPosition();
+                } else if (Touch == TOUCH_LEFT_Y) {
+                    Progress = barLight.getProgress();
+                    mViewLight.setVisibility(View.VISIBLE);
+                    delay = 2000;
+                    sleepHide(mViewLight);
+                } else if (Touch == TOUCH_RIGHT_Y) {
+                    AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+                    barSound.setProgress(am.getStreamVolume(AudioManager.STREAM_MUSIC));
+                    Progress = barSound.getProgress();
+                    mViewSound.setVisibility(View.VISIBLE);
+                    delay = 2000;
+                    sleepHide(mViewSound);
+                }
+            } else if (Touch == TOUCH_X) {
+                //从左到右滚一次90秒
+                ViewGroup.LayoutParams rllp = relativeLayout.getLayoutParams();
+                float time = (90 / (float) getWidth()) * (e1.getX() - e2.getX());
+                int x = (int) Math.floor(time * (10000 / (allTime / 1000)));
+                seekBar.setProgress((int) (Progress - (int) (x)));
+            } else if (Touch == TOUCH_LEFT_Y) {
+                float x = (127.5f / (float) getHeight()) * (e1.getY() - e2.getY());
+                barLight.setProgress((int) (Progress + (int) Math.floor(x)));
+                setLight(Progress + (int) Math.floor(x));
+            } else if (Touch == TOUCH_RIGHT_Y) {
+                AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+                float x = (am.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2 / (float) getHeight()) * (e1.getY() - e2.getY());
+                barSound.setProgress((int) (Progress + (int) Math.floor(x)));
+                am.setStreamVolume(AudioManager.STREAM_MUSIC, (int) (Progress + (int) Math.floor(x)), AudioManager.FLAG_PLAY_SOUND);
+            }
+            return true;
+        }
+
+        private int getWidth() {
+            ViewGroup.LayoutParams rllp = relativeLayout.getLayoutParams();
+            if (rllp.width == -1) {
+                Resources resources = relativeLayout.getResources();
+                DisplayMetrics dm = resources.getDisplayMetrics();
+                return dm.widthPixels;
+            }
+            return rllp.width;
+        }
+
+        private int getHeight() {
+            ViewGroup.LayoutParams rllp = relativeLayout.getLayoutParams();
+            if (rllp.height == -1) {
+                Resources resources = getResources();
+                DisplayMetrics dm = resources.getDisplayMetrics();
+                return dm.heightPixels;
+            }
+            return rllp.height;
+        }
+
+        private int getTouch(float x, float y, float lx, float ly) {
+            if (Math.abs(y - ly) < 20) {//判断y,绝对值小于20则认为是横向滑动
+                return TOUCH_X;
+            } else if (Math.abs(y - ly) > 20) {
+                Resources resources = getResources();
+                DisplayMetrics dm = resources.getDisplayMetrics();
+                if ((dm.widthPixels / 2) > x) {
+                    return TOUCH_LEFT_Y;
+                }
+                return TOUCH_RIGHT_Y;
+            }
+            return TOUCH_NULL;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {//手指抬起
+
+            isClick = false;
+            isScroll = false;
+            if (Touch != TOUCH_NULL) {
+                if (Touch == TOUCH_X) {
+                    int value = (int) Math.floor((double) allTime * ((double) seekBar.getProgress() / 10000));
+                    mVideoView.seekTo(value);
+                }
+            }
+            Touch = TOUCH_NULL;
+            return true;
+        }
+
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {//双击
@@ -333,6 +489,18 @@ public class PlayPlay extends AppCompatActivity {
             return true;
         }
     }
+
+    public void setLight(int brightness) {
+        Window window = getWindow();
+        WindowManager.LayoutParams lp = window.getAttributes();
+        if (brightness == -1) {
+            lp.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
+        } else {
+            lp.screenBrightness = (brightness <= 0 ? 1 : brightness) / 255f;
+        }
+        window.setAttributes(lp);
+    }
+
 
     public boolean isShowing() {
         if (delay > 0) {
@@ -438,6 +606,7 @@ public class PlayPlay extends AppCompatActivity {
 
             list.clear();
 
+            /*
             if (rows.has("qq")) {
                 list.add("腾讯");
 
@@ -463,7 +632,7 @@ public class PlayPlay extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
+*/
 
             if (rows.has("youku")) {
 
@@ -579,7 +748,7 @@ public class PlayPlay extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... params) {
 
-            String string = new gethttpcontent().return_contant("http://s.icodef.com/user/movie/volume?vid=" + params[0]);
+            String string = new gethttpcontent().return_contant("http://sv.icodef.com/user/movie/volume?vid=" + params[0]);
             Log.e("str", string);
             JSONObject jsonObject = null;
             JSONObject rows = null;
