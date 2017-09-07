@@ -15,6 +15,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.admin.a2017718.PlayPlay.loading;
+
 /**
  * Created by admin on 2017/8/19.
  */
@@ -55,9 +57,9 @@ public class palyplay_offline_adapter extends BaseAdapter {
             name.setText(PlayPlay.infometion.get(0));
             type.setText("豆瓣评分：" + PlayPlay.infometion.get(1) + "   " + "上映日期：" + PlayPlay.infometion.get(3));
             if (PlayPlay.infometion.get(4).equals("1")) {
-                pay.setText("VIP免费观看");
+                pay.setText("VIP可观看");
             } else {
-                pay.setText("免费观看");
+                pay.setText("免费试看");
             }
 
 
@@ -126,17 +128,18 @@ public class palyplay_offline_adapter extends BaseAdapter {
                         if (PlayPlay.infometion.get(4).equals("1")) {
 
                             if (Movie_view.VIP == true) {
+                                loading.setVisibility(View.VISIBLE);
                                 PlayPlay.mVideoView.setVideoPath(PlayPlay.lists.get(position));
                                 PlayPlay.mVideoView.start();
                             } else {
                                 Intent intent = new Intent(context, Webview.class);
-                                intent.putExtra("url", "https://www.baidu.com");
+                                intent.putExtra("url", "http://sv.icodef.com/VALLEY/vip.html");
                                 context.startActivity(intent);
 
                             }
 
                         } else {
-
+                            loading.setVisibility(View.VISIBLE);
                             PlayPlay.mVideoView.setVideoPath(PlayPlay.lists.get(position));
                             PlayPlay.mVideoView.start();
 
