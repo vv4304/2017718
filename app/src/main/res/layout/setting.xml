@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:text="本站所有资源来源于BT互联网,只供网络测试和学习交流所用、所有视频版权归原权利人，如有关视频侵犯了你的权益，请联系告之，我们将于第一时间删除!联系方式：vv4304@outlook.com"
+        android:text="本站所有资源来源于BT互联网,只供网络测试和学习交流所用,独播内容均为二次转码添加字幕压制!联系方式：vv4304@outlook.com"
         />
 
 
