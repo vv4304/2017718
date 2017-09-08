@@ -132,6 +132,18 @@ public class Movie_view extends AppCompatActivity {
             }
         });
 
+        ImageView search = (ImageView) findViewById(R.id.search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Movie_view.this, Search.class);
+                startActivity(intent);
+
+            }
+        });
+
+
 
         Button button1 = (Button) findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener() {
@@ -225,11 +237,9 @@ public class Movie_view extends AppCompatActivity {
 
     class update extends AsyncTask<String, Void, Integer> {
 
-
         @Override
         protected Integer doInBackground(String... params) {
 
-            Log.e("dada","dada");
             PackageManager packageManager = getPackageManager();
             PackageInfo packageInfo = null;
             try {
@@ -263,9 +273,7 @@ public class Movie_view extends AppCompatActivity {
 
             if (version > packageInfo.versionCode) {
 
-
                 handler.sendEmptyMessage(1);
-
 
                 try {
                     url1 = new URL(url);
@@ -457,11 +465,12 @@ public class Movie_view extends AppCompatActivity {
         protected Boolean doInBackground(Object... params) {
 
             String test = new gethttpcontent().return_contant("http://sv.icodef.com/");
+            Log.e("aaa",test);
             if (test.equals("ERROR")||test.indexOf("我是首页")==-1) {
                 handler.sendEmptyMessage(1);
-                return true;
-            } else {
                 return false;
+            } else {
+                return true;
             }
 
         }
@@ -469,6 +478,7 @@ public class Movie_view extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
+
             if (aVoid == true) {
                 new update().execute("http://sv.icodef.com/index/api/update_m");
             }
