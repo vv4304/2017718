@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,16 +59,18 @@ public class Search extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-                Log.e("aaaa","aaaaaaaaaaaaaaaaa");
+                if (list.get(position).classs.equals("电影") || list.get(position).classs.equals("电视剧")) {
+                    Intent intent = new Intent(Search.this, PlayPlay.class);
+                    intent.putExtra("type", "teleplay");
+                    intent.putExtra("url", list.get(position).url);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(Search.this, "目前不支持的类型", Toast.LENGTH_SHORT).show();
+                }
 
-                Intent intent=new Intent(Search.this,PlayPlay.class);
-                intent.putExtra("type","onlineline");
-                intent.putExtra("url",list.get(position).url);
-                startActivity(intent);
 
             }
         });
-
 
 
     }
@@ -91,7 +94,7 @@ public class Search extends AppCompatActivity {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
-                    list.add(new item(jsonObject1.getString("class"), jsonObject1.getString("title"), jsonObject1.getString("url"), jsonObject1.getString("update")));
+                    list.add(new item(jsonObject1.getString("class"), jsonObject1.getString("title"), jsonObject1.getString("url")));
 
 
                 }
@@ -119,7 +122,6 @@ public class Search extends AppCompatActivity {
             listView.setAdapter(new baseadapter());
 
 
-
         }
     }
 
@@ -130,12 +132,12 @@ public class Search extends AppCompatActivity {
         private String url;
         private String update;
 
-        public item(String classs, String title, String url, String update) {
+        public item(String classs, String title, String url) {
 
             this.classs = classs;
             this.title = title;
             this.url = url;
-            this.update = update;
+
 
 
         }
@@ -165,12 +167,9 @@ public class Search extends AppCompatActivity {
             convertView = LayoutInflater.from(Search.this).inflate(R.layout.rearch_item, parent, false);
             TextView classs = (TextView) convertView.findViewById(R.id.classs);
             TextView title = (TextView) convertView.findViewById(R.id.itemtitle);
-            TextView update = (TextView) convertView.findViewById(R.id.update);
 
             classs.setText(list.get(position).classs);
             title.setText(list.get(position).title);
-            update.setText(list.get(position).update);
-
 
             return convertView;
         }
