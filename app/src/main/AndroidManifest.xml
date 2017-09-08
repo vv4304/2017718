@@ -22,6 +22,7 @@
         <activity android:name=".Login"/>
         <activity android:name=".Webview"/>
         <activity android:name=".Setting"/>
+        <activity android:name=".Search"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
