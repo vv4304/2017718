@@ -5,31 +5,23 @@
 
     <TextView
         android:id="@+id/classs"
+        android:background="#2211"
         android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ddd"
+        android:gravity="center"
+        android:text="jj"
+        android:textSize="20dp"
         />
 
     <TextView
         android:id="@+id/itemtitle"
-        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ddd"
-        />
-    <TextView
-        android:id="@+id/update"
         android:layout_weight="1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ddd"
-        />
-
-
-
-
-
+        android:gravity="center"
+        android:text="jj"
+        android:textSize="20dp" />
 
 
 </LinearLayout>
