@@ -61,12 +61,13 @@
                 <ImageView
                     android:id="@+id/search"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/setting" />
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/search" />
+
                 <ImageView
                     android:id="@+id/setting"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/setting" />
 
             </LinearLayout>
