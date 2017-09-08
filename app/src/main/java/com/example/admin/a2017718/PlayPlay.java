@@ -509,14 +509,6 @@ public class PlayPlay extends AppCompatActivity {
         return false;
     }
 
-    public void setVideoUrl(String url) {
-        mVideoView.setVideoPath(url);
-    }
-
-    public void start() {
-        mVideoView.start();
-    }
-
     public int toggleAspectRatio(int aspect_ratio) {
         return mVideoView.toggleAspectRatio(aspect_ratio);
     }
@@ -581,6 +573,7 @@ public class PlayPlay extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            Log.e("ssss",str+"  /  "+params[0]);
 
             try {
                 infometion.add(jsonObject.getString("title"));
