@@ -23,6 +23,8 @@ import java.io.InputStream;
 
 public class Setting extends AppCompatActivity {
 
+    public static final String URL="http://s.icodef.com/";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

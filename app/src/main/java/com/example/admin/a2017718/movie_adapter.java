@@ -209,7 +209,7 @@ public class movie_adapter extends BaseAdapter {
         @Override
         protected Void doInBackground(Integer... params) {
 
-            contant = new gethttpcontent().return_contant("http://sv.icodef.com/user/movie/mlist?page=" + params[0]);
+            contant = new gethttpcontent().return_contant(Setting.URL+"/user/movie/mlist?page=" + params[0]);
 
             return null;
         }

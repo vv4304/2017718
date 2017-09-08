@@ -101,7 +101,7 @@ public class locallogin {
 
 
             try {
-                url = new URL("http://sv.icodef.com/index/login/login");
+                url = new URL(Setting.URL + "/index/login/login");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -161,7 +161,7 @@ public class locallogin {
                         Movie_view.uid_token = map.get(0).substring(0, map.get(0).indexOf(";")) + ";" + map.get(1).substring(0, map.get(1).indexOf(";"));
 
 
-                        URL url1 = new URL("http://sv.icodef.com/user/index/index");
+                        URL url1 = new URL(Setting.URL + "/user/api/getauth");
                         HttpURLConnection getuser = (HttpURLConnection) url1.openConnection();
                         getuser.setRequestProperty("Cookie", Movie_view.uid_token);
                         getuser.setDoInput(true);
@@ -172,20 +172,18 @@ public class locallogin {
                         if (login != null) {
 
                             Log.e("aa", login);
-                            if (login.indexOf(jsonobject.getString("account")) != -1) {
-                                Movie_view.ACCOUNT = jsonobject.getString("account");
-                                if (login.indexOf("网络VIP1") != -1) {
-                                    Log.e("VIP", "true");
-                                    Movie_view.VIP = true;
-                                }
-
-
-                                Message msg = new Message();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("account", jsonobject.getString("account"));
-                                msg.setData(bundle);
-                                Movie_view.handler.sendMessage(msg);
+                            Movie_view.ACCOUNT = jsonobject.getString("account");
+                            if (login.indexOf("影视VIP") != -1) {
+                                Log.e("VIP", "true");
+                                Movie_view.VIP = true;
                             }
+
+                            Message msg = new Message();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("account", jsonobject.getString("account"));
+                            msg.setData(bundle);
+                            Movie_view.handler.sendMessage(msg);
+
                         }
 
                     } else {

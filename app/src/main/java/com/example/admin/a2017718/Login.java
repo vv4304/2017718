@@ -44,7 +44,7 @@ public class Login extends AppCompatActivity {
         account = (EditText) findViewById(R.id.account);
         password = (EditText) findViewById(R.id.password);
         final TextView login = (TextView) findViewById(R.id.login);
-        final EditText emailedittext= (EditText) findViewById(R.id.emailedittext);
+        final EditText emailedittext = (EditText) findViewById(R.id.emailedittext);
         final LinearLayout email = (LinearLayout) findViewById(R.id.email);
         final Button register = (Button) findViewById(R.id.register);
         ImageView back = (ImageView) findViewById(R.id.back);
@@ -68,7 +68,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (register.getText().toString().equals("注册")) {
-                    new register().execute(account.getText().toString(), password.getText().toString(),emailedittext.getText().toString());
+                    new register().execute(account.getText().toString(), password.getText().toString(), emailedittext.getText().toString());
                 } else {
                     new login().execute(account.getText().toString(), password.getText().toString());
                 }
@@ -89,7 +89,7 @@ public class Login extends AppCompatActivity {
             String data = "user=" + params[0] + "&pwd=" + params[1];
 
             try {
-                URL url = new URL("http://sv.icodef.com/index/login/login");
+                URL url = new URL(Setting.URL + "/index/login/login");
                 HttpURLConnection http = (HttpURLConnection) url.openConnection();
                 http.setRequestMethod("POST");
                 http.setConnectTimeout(5000);
@@ -115,7 +115,7 @@ public class Login extends AppCompatActivity {
                     if (json.getString("msg").equals("登陆成功")) {
                         List<String> map = http.getHeaderFields().get("Set-Cookie");
                         Movie_view.uid_token = map.get(0).substring(0, map.get(0).indexOf(";")) + ";" + map.get(1).substring(0, map.get(1).indexOf(";"));
-                        URL url1 = new URL("http://sv.icodef.com/user/index/index");
+                        URL url1 = new URL(Setting.URL + "/user/api/getauth");
                         HttpURLConnection getuser = (HttpURLConnection) url1.openConnection();
                         getuser.setRequestProperty("Cookie", Movie_view.uid_token);
                         getuser.setDoInput(true);
@@ -126,19 +126,13 @@ public class Login extends AppCompatActivity {
 
                         if (login != null) {
 
-                            if (login.indexOf(params[0]) != -1) {
-                                Movie_view.ACCOUNT = params[0];
-
-                                if (login.indexOf("网络VIP1") != -1) {
-                                    Movie_view.VIP = true;
-                                }
-
-                                if (new locallogin().writelogin(params[0], params[1]) != true) {
-                                    Log.e("weitelogin", "写入错误");
-                                }
-
+                            if (login.indexOf("网络VIP1") != -1) {
+                                Movie_view.VIP = true;
                             }
 
+                            if (new locallogin().writelogin(params[0], params[1]) != true) {
+                                Log.e("weitelogin", "写入错误");
+                            }
 
                         }
                         return "登陆成功";
@@ -195,11 +189,11 @@ public class Login extends AppCompatActivity {
             URL url = null;
             OutputStream out = null;
             HttpURLConnection http = null;
-            String data = "user=" + params[0] + "&pwd=" + params[1] + "&email="+params[2];
+            String data = "user=" + params[0] + "&pwd=" + params[1] + "&email=" + params[2];
 
 
             try {
-                url = new URL("http://sv.icodef.com/index/login/register");
+                url = new URL(Setting.URL + "/index/login/register");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }

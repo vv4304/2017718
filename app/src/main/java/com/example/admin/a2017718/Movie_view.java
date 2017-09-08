@@ -188,7 +188,7 @@ public class Movie_view extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(Movie_view.this, Webview.class);
-                intent.putExtra("url", "http://sv.icodef.com/VALLEY/vip.html");
+                intent.putExtra("url", Setting.URL+"/VALLEY/vip.html");
                 startActivity(intent);
 
             }
@@ -389,7 +389,7 @@ public class Movie_view extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             try {
-                JSONObject jsonObject = new JSONObject(new gethttpcontent().return_contant("http://sv.icodef.com/index/api/notice_m"));
+                JSONObject jsonObject = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/index/api/notice_m"));
                 str = jsonObject.getString("msg");
 
                 handler.sendEmptyMessage(1);
@@ -464,8 +464,7 @@ public class Movie_view extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Object... params) {
 
-            String test = new gethttpcontent().return_contant("http://sv.icodef.com/");
-            Log.e("aaa",test);
+            String test = new gethttpcontent().return_contant(Setting.URL+"/");
             if (test.equals("ERROR")||test.indexOf("我是首页")==-1) {
                 handler.sendEmptyMessage(1);
                 return false;
@@ -480,7 +479,7 @@ public class Movie_view extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
             if (aVoid == true) {
-                new update().execute("http://sv.icodef.com/index/api/update_m");
+                new update().execute(Setting.URL+"/index/api/update_m");
             }
         }
 

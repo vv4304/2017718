@@ -75,7 +75,7 @@
             android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="数字加字母"
-            android:inputType="textPersonName" />
+            android:inputType="textPassword" />
     </LinearLayout>
 
     <LinearLayout

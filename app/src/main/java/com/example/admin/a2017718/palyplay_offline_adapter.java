@@ -15,8 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.admin.a2017718.PlayPlay.loading;
-
 /**
  * Created by admin on 2017/8/19.
  */
@@ -128,20 +126,20 @@ public class palyplay_offline_adapter extends BaseAdapter {
                         if (PlayPlay.infometion.get(4).equals("1")) {
 
                             if (Movie_view.VIP == true) {
-                                loading.setVisibility(View.VISIBLE);
-                                PlayPlay.mVideoView.setVideoPath(PlayPlay.lists.get(position));
-                                PlayPlay.mVideoView.start();
+//                                loading.setVisibility(View.VISIBLE);
+                                PlayPlay.ijk.setVideoUrl(PlayPlay.lists.get(position));
+                                PlayPlay.ijk.start();
                             } else {
                                 Intent intent = new Intent(context, Webview.class);
-                                intent.putExtra("url", "http://sv.icodef.com/VALLEY/vip.html");
+                                intent.putExtra("url", Setting.URL+"/VALLEY/vip.html");
                                 context.startActivity(intent);
 
                             }
 
                         } else {
-                            loading.setVisibility(View.VISIBLE);
-                            PlayPlay.mVideoView.setVideoPath(PlayPlay.lists.get(position));
-                            PlayPlay.mVideoView.start();
+//                            loading.setVisibility(View.VISIBLE);
+                            PlayPlay.ijk.setVideoUrl(PlayPlay.lists.get(position));
+                            PlayPlay.ijk.start();
 
                         }
 

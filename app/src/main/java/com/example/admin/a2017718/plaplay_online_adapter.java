@@ -34,8 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.admin.a2017718.PlayPlay.imgo;
-import static com.example.admin.a2017718.PlayPlay.loading;
-import static com.example.admin.a2017718.PlayPlay.mVideoView;
+import static com.example.admin.a2017718.PlayPlay.ijk;
 import static com.example.admin.a2017718.PlayPlay.qq;
 import static com.example.admin.a2017718.PlayPlay.sohu;
 import static com.example.admin.a2017718.PlayPlay.youku;
@@ -170,7 +169,7 @@ public class plaplay_online_adapter extends BaseAdapter {
                 case "qq":
                     try {
                         Log.e("解析地址", qq.get(params[0]));
-                        string = new JSONObject(new gethttpcontent().return_contant("http://sv.icodef.com/user/movie/api?url=https" + qq.get(params[0]).substring(4))).getJSONArray("video").getJSONObject(2).getString("m3u8");
+                        string = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/user/movie/api?url=https" + qq.get(params[0]).substring(4))).getJSONArray("video").getJSONObject(2).getString("m3u8");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -178,7 +177,7 @@ public class plaplay_online_adapter extends BaseAdapter {
                 case "sohu":
                     try {
                         Log.e("解析地址", sohu.get(params[0]));
-                        string = new JSONObject(new gethttpcontent().return_contant("http://sv.icodef.com/user/movie/api?url=" + sohu.get(params[0]))).getJSONArray("video").getJSONObject(2).getString("m3u8");
+                        string = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/user/movie/api?url=" + sohu.get(params[0]))).getJSONArray("video").getJSONObject(2).getString("m3u8");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -187,9 +186,9 @@ public class plaplay_online_adapter extends BaseAdapter {
                     try {
                         Log.e("解析地址", youku.get(params[0]));
                         if (PlayPlay.type.equals("teleplay")) {
-                            string = new JSONObject(new gethttpcontent().return_contant("http://sv.icodef.com/user/movie/api?url=" + youku.get(params[0]))).getJSONArray("video").getJSONObject(3).getString("m3u8");
+                            string = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/user/movie/api?url=" + youku.get(params[0]))).getJSONArray("video").getJSONObject(3).getString("m3u8");
                         } else {
-                            string = new JSONObject(new gethttpcontent().return_contant("http://sv.icodef.com/user/movie/api?url=" + youku.get(params[0]))).getJSONArray("video").getJSONObject(2).getString("m3u8");
+                            string = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/user/movie/api?url=" + youku.get(params[0]))).getJSONArray("video").getJSONObject(2).getString("m3u8");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -199,7 +198,7 @@ public class plaplay_online_adapter extends BaseAdapter {
                 case "imgo":
                     try {
                         Log.e("解析地址", imgo.get(params[0]));
-                        string = new JSONObject(new gethttpcontent().return_contant("http://sv.icodef.com/user/movie/api?url=" + imgo.get(params[0]))).getJSONArray("video").getJSONObject(2).getString("m3u8");
+                        string = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/user/movie/api?url=" + imgo.get(params[0]))).getJSONArray("video").getJSONObject(2).getString("m3u8");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -236,9 +235,8 @@ public class plaplay_online_adapter extends BaseAdapter {
 
             Log.e("aVoid",aVoid);
             if (aVoid.equals("0") != true) {
-                loading.setVisibility(View.VISIBLE);
-                mVideoView.setVideoPath(aVoid);
-                mVideoView.start();
+                ijk.setVideoUrl(aVoid);
+                ijk.start();
             } else {
                 Toast.makeText(context, "错误", Toast.LENGTH_SHORT).show();
             }
@@ -370,7 +368,7 @@ public class plaplay_online_adapter extends BaseAdapter {
                             new loadurl().execute(position);
                         } else {
                             Intent intent = new Intent(context, Webview.class);
-                            intent.putExtra("url", "http://sv.icodef.com/VALLEY/vip.html");
+                            intent.putExtra("url", Setting.URL+"/VALLEY/vip.html");
                             context.startActivity(intent);
 
 
