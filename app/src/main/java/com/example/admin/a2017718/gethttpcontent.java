@@ -22,8 +22,8 @@ public class gethttpcontent {
         int code=0;
         try {
             httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
-            httpURLConnection.setConnectTimeout(3000);
-            httpURLConnection.setReadTimeout(3000);
+            httpURLConnection.setConnectTimeout(10000);
+            httpURLConnection.setReadTimeout(10000);
             httpURLConnection.setRequestProperty("Cookie", Movie_view.uid_token);
             httpURLConnection.setRequestMethod("GET");
 
