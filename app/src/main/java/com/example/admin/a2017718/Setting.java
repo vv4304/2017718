@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,7 +24,7 @@ import java.io.InputStream;
 
 public class Setting extends AppCompatActivity {
 
-    public static final String URL="http://s.icodef.com/";
+    public static final String URL = "http://sv.icodef.com/";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,12 +40,20 @@ public class Setting extends AppCompatActivity {
             }
         });
 
+        final Button file = (Button) findViewById(R.id.file);
+        file.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // filelist();
+            }
+        });
 
-        Button version= (Button) findViewById(R.id.version);
+
+        Button version = (Button) findViewById(R.id.version);
         version.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Movie_view.VIP=true;
+                Movie_view.VIP = true;
 
             }
         });
@@ -52,11 +61,11 @@ public class Setting extends AppCompatActivity {
 
     }
 
-
     public void filelist() {
         String[] strings = fileList();
         for (int i = 0; i < strings.length; i++) {
-            Log.e("list:", strings[i]);
+            Toast.makeText(Setting.this, "删除" + strings[i], Toast.LENGTH_SHORT).show();
+            deleteFile(getFilesDir() + "/" + strings[i]);
         }
     }
 
