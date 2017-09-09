@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class Search extends AppCompatActivity {
     ListView listView;
     EditText searchtext;
     Button searchok;
+    int number = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,15 +43,24 @@ public class Search extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.searchshow);
         searchok = (Button) findViewById(R.id.searchok);
         searchtext = (EditText) findViewById(R.id.searchtext);
-
+        ImageView back = (ImageView) findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         searchok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                new getitem().execute(searchtext.getText().toString());
-
+                if (number < 5) {
+                    number++;
+                    list.clear();
+                    new getitem().execute(searchtext.getText().toString());
+                } else {
+                    Toast.makeText(Search.this, "请勿频繁搜索", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -59,13 +70,17 @@ public class Search extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-                if (list.get(position).classs.equals("电影") || list.get(position).classs.equals("电视剧")) {
+                if (list.get(position).classs.equals("电影")) {
+                    Intent intent = new Intent(Search.this, PlayPlay.class);
+                    intent.putExtra("type", "movie");
+                    intent.putExtra("url", list.get(position).url);
+                    startActivity(intent);
+                }
+                if (list.get(position).classs.equals("电视剧")) {
                     Intent intent = new Intent(Search.this, PlayPlay.class);
                     intent.putExtra("type", "teleplay");
                     intent.putExtra("url", list.get(position).url);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(Search.this, "目前不支持的类型", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -76,20 +91,24 @@ public class Search extends AppCompatActivity {
     }
 
 
-    class getitem extends AsyncTask<String, Void, Void> {
+    class getitem extends AsyncTask<String, Object, Boolean> {
 
 
         @Override
-        protected Void doInBackground(String... params) {
-            Log.e("sss", params[0]);
-
+        protected Boolean doInBackground(String... params) {
             String string = new gethttpcontent().return_contant("http://video.visha.cc/search?name=" + params[0]);
 
-            Log.e("aaa", string);
+            Log.e("string", string);
+            if (string == null) {
+                return false;
+            }
 
             try {
                 JSONObject jsonObject = new JSONObject(string);
                 JSONArray jsonArray = jsonObject.getJSONArray("rows");
+                if (jsonObject.getString("rows").equals("null")) {
+                    return false;
+                }
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
@@ -105,22 +124,19 @@ public class Search extends AppCompatActivity {
             }
 
 
-            for (int i = 0; i < list.size(); i++) {
-                Log.e("a", list.get(i).title);
-
-            }
-
-
-            return null;
+            return true;
         }
 
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
 
-            listView.setAdapter(new baseadapter());
-
+            if (aVoid == true) {
+                listView.setAdapter(new baseadapter());
+            } else {
+                Toast.makeText(Search.this, "搜索错误", Toast.LENGTH_SHORT).show();
+            }
 
         }
     }
@@ -137,7 +153,6 @@ public class Search extends AppCompatActivity {
             this.classs = classs;
             this.title = title;
             this.url = url;
-
 
 
         }
