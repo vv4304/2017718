@@ -365,6 +365,9 @@ public class plaplay_online_adapter extends BaseAdapter {
                     if (Movie_view.ACCOUNT != null) {
 
                         if (Movie_view.VIP == true) {
+                            PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
+                            PlayPlay.ijk.setTitle("播放中。。");
+
                             new loadurl().execute(position);
                         } else {
                             Intent intent = new Intent(context, Webview.class);

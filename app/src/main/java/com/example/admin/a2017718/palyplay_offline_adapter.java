@@ -126,7 +126,8 @@ public class palyplay_offline_adapter extends BaseAdapter {
                         if (PlayPlay.infometion.get(4).equals("1")) {
 
                             if (Movie_view.VIP == true) {
-//                                loading.setVisibility(View.VISIBLE);
+                               PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
+                                PlayPlay.ijk.setTitle("播放中。。");
                                 PlayPlay.ijk.setVideoUrl(PlayPlay.lists.get(position));
                                 PlayPlay.ijk.start();
                             } else {
