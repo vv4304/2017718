@@ -16,7 +16,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Play" />
         <activity android:name=".Movie_view"/>
         <activity  android:name=".PlayPlay" android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".Login"/>
