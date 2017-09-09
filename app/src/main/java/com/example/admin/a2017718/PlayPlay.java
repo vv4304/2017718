@@ -333,4 +333,30 @@ public class PlayPlay extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (ijk.isFull == false) {
+            infometion.clear();
+            lists.clear();
+            qq.clear();
+            youku.clear();
+            imgo.clear();
+            sohu.clear();
+            ijk.deletePlayer();
+            super.onBackPressed();
+
+        }
+
+
+    }
+
+
+    @Override
+    protected void onPause() {
+        ijk.pause();
+        super.onPause();
+    }
+
+
 }
