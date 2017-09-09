@@ -32,10 +32,11 @@ import android.widget.TextView;
 
 import com.example.admin.a2017718.R;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
-
+import java.lang.Runtime;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
@@ -138,7 +139,7 @@ public class ijkvideo {
         playTime = (TextView) mViewHolder.findViewById(R.id.now_time);
         playAllTime = (TextView) mViewHolder.findViewById(R.id.all_time);
         mTitleText = (TextView) mViewHolder.findViewById(R.id.play_title);
-        RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(mWidth, mHeight);
+        FrameLayout.LayoutParams rllp = new FrameLayout.LayoutParams(mWidth, mHeight);
         rllp.leftMargin = mLeft;
         rllp.topMargin = mTop;
         ((Activity) mContext).addContentView(mViewHolder, rllp);
@@ -184,8 +185,12 @@ public class ijkvideo {
                 if (isFull) {
                     fullScreen();
                 } else {
-                    Instrumentation inst = new Instrumentation();
-                    inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+                    try {
+                        Runtime runtime = Runtime.getRuntime();
+                        runtime.exec("input keyevent " + KeyEvent.KEYCODE_BACK);
+                    }catch (IOException e){
+
+                    }
                 }
             }
         });
