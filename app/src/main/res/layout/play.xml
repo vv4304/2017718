@@ -5,51 +5,87 @@
     android:layout_height="match_parent"
     android:background="#000">
 
-
     <com.example.admin.ijkplayer.IjkVideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="#000">
-    </com.example.admin.ijkplayer.IjkVideoView>
+        android:background="#000"></com.example.admin.ijkplayer.IjkVideoView>
+
+    <RelativeLayout
+        android:id="@+id/cap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#554477">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            android:text="如果出问题不用大惊小怪，因为这是正常现象,找群主反馈吧\nヾ(。￣□￣)ﾂ゜゜゜"
+            android:textColor="#ffffff"
+            android:textSize="10dp" />
+
+        <ProgressBar
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/play_top"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@drawable/shape_top"
-        android:gravity="center">
+        android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+
+        <ImageButton
+            android:id="@+id/play_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_selector"
+            android:scaleType="fitXY"
+            android:src="@drawable/btn_back" />
+
+        <TextView
+            android:id="@+id/play_title"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:gravity="center">
+            android:layout_margin="10dp"
+            android:gravity="center|left"
+            android:text=""
+            android:textColor="#ffffff"
+            android:textSize="16dp" />
 
-            <ImageButton
-                android:id="@+id/play_back"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/btn_selector"
-                android:scaleType="fitXY"
-                android:src="@drawable/btn_back" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:id="@+id/time_ctrl"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight=".5">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/play_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|left"
-                android:text="Clannad 第一集"
-                android:textColor="#ffffff"
-                android:textSize="16dp" />
-        </RelativeLayout>
+                android:id="@+id/now_time"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="00:00"
+                android:textColor="#fff"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/all_time"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="/00:00"
+                android:textColor="#fff"
+                android:textSize="18dp" />
+        </LinearLayout>
+
 
     </LinearLayout>
 
@@ -178,30 +214,6 @@
                 android:thumb="@drawable/seekbar_ratio"
                 android:thumbOffset="1.4dp" />
 
-            <LinearLayout
-                android:id="@+id/time_ctrl"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_alignParentBottom="true"
-
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/now_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="00:00"
-                    android:textColor="#fff"
-                    android:textSize="18dp" />
-
-                <TextView
-                    android:id="@+id/all_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="/00:00"
-                    android:textColor="#fff"
-                    android:textSize="18dp" />
-            </LinearLayout>
 
         </RelativeLayout>
 

@@ -15,11 +15,21 @@
             android:id="@+id/back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:src="@drawable/back" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="#FFFFFF"
+            android:text="设置"
+            />
 
     </LinearLayout>
 
     <Button
+        android:id="@+id/file"
         android:text="清理空间"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:text="本站所有资源来源于BT互联网,只供网络测试和学习交流所用,独播内容均为二次转码添加字幕压制!联系方式：vv4304@outlook.com"
+        android:text="本站所有资源来源于BT互联网,独播内容均为二次转码添加字幕压制!如有议意联系方式：vv4304@outlook.com"
         />
 
 
