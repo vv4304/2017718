@@ -37,6 +37,7 @@ import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.lang.Runtime;
+
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
@@ -57,6 +58,8 @@ public class ijkvideo {
     private RelativeLayout mViewSound;
     private ProgressBar barLight;
     private ProgressBar barSound;
+    public ProgressBar loading;
+    public RelativeLayout cap;
 
     public ijkvideo(Context context) {
         mContext = context;
@@ -139,6 +142,11 @@ public class ijkvideo {
         playTime = (TextView) mViewHolder.findViewById(R.id.now_time);
         playAllTime = (TextView) mViewHolder.findViewById(R.id.all_time);
         mTitleText = (TextView) mViewHolder.findViewById(R.id.play_title);
+        loading = (ProgressBar) mViewHolder.findViewById(R.id.loading);
+        loading.setVisibility(View.INVISIBLE);
+        cap = (RelativeLayout) mViewHolder.findViewById(R.id.cap);
+
+
         FrameLayout.LayoutParams rllp = new FrameLayout.LayoutParams(mWidth, mHeight);
         rllp.leftMargin = mLeft;
         rllp.topMargin = mTop;
@@ -188,7 +196,7 @@ public class ijkvideo {
                     try {
                         Runtime runtime = Runtime.getRuntime();
                         runtime.exec("input keyevent " + KeyEvent.KEYCODE_BACK);
-                    }catch (IOException e){
+                    } catch (IOException e) {
 
                     }
                 }
@@ -226,6 +234,9 @@ public class ijkvideo {
         mVideoView.setOnInfoListener(new IMediaPlayer.OnInfoListener() {
             @Override
             public boolean onInfo(IMediaPlayer iMediaPlayer, int i, int i1) {
+                if (i == 10002) {
+                    cap.setVisibility(View.GONE);
+                }
                 if (i == IMediaPlayer.MEDIA_INFO_AUDIO_RENDERING_START) {
                     allTime = mVideoView.getDuration();
                     Timer timer = new Timer();
@@ -245,6 +256,7 @@ public class ijkvideo {
                 return false;
             }
         });
+
         mVideoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(IMediaPlayer iMediaPlayer) {
@@ -351,11 +363,11 @@ public class ijkvideo {
     }
 
     public void move(int left, int top, int width, int height) {
-        FrameLayout.LayoutParams rllp = (FrameLayout.LayoutParams)mViewHolder.getLayoutParams();
+        FrameLayout.LayoutParams rllp = (FrameLayout.LayoutParams) mViewHolder.getLayoutParams();
         rllp.width = width;
         rllp.height = height;
-        rllp.leftMargin=left;
-        rllp.topMargin=top;
+        rllp.leftMargin = left;
+        rllp.topMargin = top;
         mViewHolder.setLayoutParams(rllp);
     }
 
