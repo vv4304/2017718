@@ -126,7 +126,7 @@ public class Login extends AppCompatActivity {
 
                         if (login != null) {
 
-                            if (login.indexOf("网络VIP1") != -1) {
+                            if (login.indexOf("影视VIP") != -1) {
                                 Movie_view.VIP = true;
                             }
 
