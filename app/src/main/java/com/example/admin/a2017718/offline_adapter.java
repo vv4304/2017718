@@ -25,33 +25,34 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
 /**
- * Created by admin on 2017/8/16.
+ * Created by admin on 2017/7/21.
  */
 
-public class online_adapter extends BaseAdapter {
+public class offline_adapter extends BaseAdapter {
+    Context contexts;
+    String url;
     boolean down = false;
-    int Page = 1;
-    Context context;
+    int page = 1;
+
+    public offline_adapter(Context context) {
+        this.contexts = context;
 
 
-    public online_adapter(Context context) {
-        this.context = context;
-
-        if (Movie_view.online_movie.size() == 0) {
-
-            new getitme().execute(Page);
-            Page++;
+        if (Movie_view.offline.size() == 0) {
+            new movie_getitem().execute(page);
+            page++;
 
 
         }
 
-    }
 
+    }
 
     @Override
     public int getCount() {
-        return Movie_view.online_movie.size();
+        return Movie_view.offline.size();
     }
 
     @Override
@@ -67,98 +68,31 @@ public class online_adapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if (position == Movie_view.online_movie.size() - 1 && down != true) {
-
-
-            new getitme().execute(Page);
-            Page++;
-
-
+        if (position == Movie_view.offline.size() - 1 && down != true) {
+            new movie_getitem().execute(page);
+            page++;
         }
 
-
-        convertView = LayoutInflater.from(context).inflate(R.layout.item, parent, false);
-
-
-        TextView update = (TextView) convertView.findViewById(R.id.vip);
+        convertView = LayoutInflater.from(contexts).inflate(R.layout.item, parent, false);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.image1);
-        TextView name = (TextView) convertView.findViewById(R.id.name);
+        TextView textView = (TextView) convertView.findViewById(R.id.name);
+        TextView vip = (TextView) convertView.findViewById(R.id.vip);
+        textView.setText(Movie_view.offline.get(position).getName());
+        new loadimage().execute(String.valueOf(Movie_view.offline.get(position).getId()), String.valueOf(Movie_view.offline.get(position).getImageurl()), imageView);
 
+        if (Movie_view.offline.get(position).getPay().equals("0")) {
+            vip.setVisibility(View.GONE);
 
-        update.setText(Movie_view.online_movie.get(position).getPay());
-        name.setText(Movie_view.online_movie.get(position).getId());
-
-
-        new loadimage().execute(Movie_view.online_movie.get(position).getId(), Movie_view.online_movie.get(position).getName(), imageView);
+        }
 
 
         return convertView;
     }
 
 
-    class getitme extends AsyncTask<Object, Object, Boolean> {
-
-        JSONObject jsonObject;
-        JSONArray jsonArray;
-
-        @Override
-        protected Boolean doInBackground(Object... params) {
-
-            String src = new gethttpcontent().return_contant("http://video.visha.cc/search?class=%E7%94%B5%E5%BD%B1&page=" + params[0]);
-
-            try {
-                jsonObject = new JSONObject(src);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            if (jsonObject != null) {
-
-                try {
-                    jsonArray = jsonObject.getJSONArray("rows");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    try {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-
-                        Movie_view.online_movie.add(new movies(jsonObject.getString("title"), jsonObject.getString("update"), jsonObject.getString("image"), jsonObject.getString("url")));
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
-                return true;
-            } else {
-                return false;
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aVoid) {
-            super.onPostExecute(aVoid);
-
-            if (aVoid != false) {
-                if (Page == 2) {
-                    notifyDataSetChanged();
-                }
-
-            }
-        }
-    }
-
-
     class loadimage extends AsyncTask<Object, Void, String> {
 
-        String name;
+        String id;
         String url = null;
         URL Url;
         ImageView imageView;
@@ -166,7 +100,7 @@ public class online_adapter extends BaseAdapter {
         @Override
         protected String doInBackground(Object... params) {
 
-            name = (String) params[0];
+            id = (String) params[0];
             url = (String) params[1];
             imageView = (ImageView) params[2];
 
@@ -175,9 +109,9 @@ public class online_adapter extends BaseAdapter {
             OutputStream outputStream = null;
 
 
-            File file = new File(context.getFilesDir() + "/" + name + ".jpg");
+            File file = new File(contexts.getFilesDir() + "/" + id + ".jpg");
             if (file.exists()) {
-                return name;
+                return id.toString();
             } else {
 
 
@@ -196,7 +130,7 @@ public class online_adapter extends BaseAdapter {
 
 
                 try {
-                    outputStream = context.openFileOutput(name + ".jpg", context.MODE_PRIVATE);
+                    outputStream = contexts.openFileOutput(id + ".jpg", contexts.MODE_PRIVATE);
                 } catch (FileNotFoundException e) {
                     Log.e("Error", "outputstream");
                 }
@@ -241,22 +175,75 @@ public class online_adapter extends BaseAdapter {
 
 
             try {
-                fileInputStream = new FileInputStream(context.getFilesDir() + "/" + s + ".jpg");
+                fileInputStream = new FileInputStream(contexts.getFilesDir() + "/" + s + ".jpg");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
 
 
             Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
-
             imageView.setImageBitmap(bitmap);
+
+
         }
 
 
     }
 
 
+    class movie_getitem extends AsyncTask<Integer, Object, Boolean> {
+
+
+        @Override
+        protected Boolean doInBackground(Integer... params) {
+            Log.e("page3", "11111111111111111111");
+
+            String contant = new gethttpcontent().return_contant(Setting.URL + "/user/movie/mlist?page=" + params[0]);
+
+            Log.e("aaa",contant);
+            if (contant.indexOf("DOCTYPE") != -1 || contant.equals("ERROR")) {
+                Log.e("page3", "无法连接");
+                return false;
+            }
+
+
+            if (contant.indexOf("rows") != -1) {
+                try {
+                    JSONObject jsonObject = new JSONObject(contant);
+                    JSONArray jsonArray = jsonObject.getJSONArray("rows");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        Movie_view.offline.add(new movies(jsonObject1.getString("vid"), jsonObject1.getString("pay"), jsonObject1.getString("name"), jsonObject1.getString("image_url")));
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                down = true;
+            }
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aVoid) {
+            super.onPostExecute(aVoid);
+
+
+            if (aVoid == true) {
+                if (page == 2) {
+                    notifyDataSetChanged();
+                }
+            } else {
+                Page3.offlineview.setVisibility(View.VISIBLE);
+            }
+
+
+        }
+    }
+
+
 }
-
-
-
