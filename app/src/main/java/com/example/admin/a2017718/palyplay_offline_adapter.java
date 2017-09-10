@@ -55,9 +55,9 @@ public class palyplay_offline_adapter extends BaseAdapter {
             name.setText(PlayPlay.infometion.get(0));
             type.setText("豆瓣评分：" + PlayPlay.infometion.get(1) + "   " + "上映日期：" + PlayPlay.infometion.get(3));
             if (PlayPlay.infometion.get(4).equals("1")) {
-                pay.setText("VIP可观看");
+                pay.setText("VIP可免流观看");
             } else {
-                pay.setText("免费试看");
+                pay.setText("免费免流试看");
             }
 
 

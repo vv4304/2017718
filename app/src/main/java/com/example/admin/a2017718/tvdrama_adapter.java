@@ -109,19 +109,21 @@ public class tvdrama_adapter extends BaseAdapter {
 
             String src = new gethttpcontent().return_contant("http://video.visha.cc/search?class=%E7%94%B5%E8%A7%86%E5%89%A7&page=" + params[0]);
 
+            if(src.indexOf("DOCTYPE")!=-1||src.equals("ERROR"))
+            {
+                Log.e("page2","无法连接");
+                return false;
+            }
+
             try {
                 jsonObject = new JSONObject(src);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-
-            if (jsonObject != null) {
-
                 try {
                     jsonArray = jsonObject.getJSONArray("rows");
                 } catch (JSONException e) {
-                    Log.e("*", "rows获取失败");
                 }
 
 
@@ -141,9 +143,6 @@ public class tvdrama_adapter extends BaseAdapter {
                 }
 
                 return true;
-            } else {
-                return false;
-            }
 
         }
 
@@ -151,11 +150,11 @@ public class tvdrama_adapter extends BaseAdapter {
         protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
 
-            if (aVoid != false) {
+            if (aVoid == true) {
                 if (Page == 2) {
                     notifyDataSetChanged();
                 }
-            }
+            }else {Page2.offlineview.setVisibility(View.VISIBLE);}
         }
     }
 

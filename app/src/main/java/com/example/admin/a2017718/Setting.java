@@ -1,14 +1,19 @@
 package com.example.admin.a2017718;
 
-import android.app.Application;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,6 +37,12 @@ public class Setting extends AppCompatActivity {
         setContentView(R.layout.setting);
 
 
+        final LinearLayout frame= (LinearLayout) findViewById(R.id.submitframe);
+        frame.setVisibility(View.GONE);
+
+
+
+
         ImageView back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,17 +55,26 @@ public class Setting extends AppCompatActivity {
         file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(Setting.this,"未完成",Toast.LENGTH_SHORT).show();
                 // filelist();
             }
         });
 
 
-        Button version = (Button) findViewById(R.id.version);
-        version.setOnClickListener(new View.OnClickListener() {
+        Button submit= (Button) findViewById(R.id.submit);
+        submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Movie_view.VIP = true;
+                frame.setVisibility(View.VISIBLE);
+            }
+        });
 
+        Button issubmit= (Button) findViewById(R.id.issubmit);
+        issubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText editText= (EditText) findViewById(R.id.contant);
+                new post().execute(Movie_view.ACCOUNT,editText.getText().toString());
             }
         });
 
@@ -112,6 +132,48 @@ public class Setting extends AppCompatActivity {
 
 
     }
+
+
+
+
+    class post extends AsyncTask<String,Void,String>
+    {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                String string= new gethttpcontent().post(params[0],params[1]);
+                JSONObject jsonObject=new JSONObject(string);
+                return jsonObject.getString("msg");
+
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(s!=null) {
+                Toast.makeText(Setting.this, s, Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+    }
+
+
+
+
 
 
 }

@@ -28,9 +28,45 @@
 
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/submitframe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="40dp"
+        >
+        <EditText
+            android:id="@+id/contant"
+            android:layout_weight="9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/issubmit"
+            android:text="提交"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/submit"
+        android:text="提意见"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF88FF"
+        android:textColor="#FFFFFF"
+        />
+
+
     <Button
         android:id="@+id/file"
         android:text="清理空间"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FF88FF"
@@ -38,19 +74,13 @@
         />
     <Button
         android:text="联系Q群：663535674"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FF88FF"
         android:textColor="#FFFFFF"
         />
-    <Button
-        android:id="@+id/version"
-        android:text="当前版本：2.0"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FF88FF"
-        android:textColor="#FFFFFF"
-        />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
