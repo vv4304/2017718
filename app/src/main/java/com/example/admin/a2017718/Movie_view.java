@@ -45,14 +45,14 @@ import java.util.List;
  */
 public class Movie_view extends AppCompatActivity {
     int i = 1;
-    public static List<movies> movielist = new ArrayList<>();
+    public static List<movies> offline = new ArrayList<>();
     public static List<movies> tv_drama = new ArrayList<>();
     public static List<movies> online_movie = new ArrayList<>();
     private AlertDialog.Builder builder;
     private AlertDialog alertDialog;
-    public static movie_adapter movie_adapter;
+    public static offline_adapter offline_adapter;
     public static tvdrama_adapter tvdrama_adapter;
-    public static online_adapter online_adapter;
+    public static movie_adapter movie_adapter;
     public ViewPager viewPager;
     ImageView line1;
     DisplayMetrics metric;
@@ -67,12 +67,12 @@ public class Movie_view extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content);
+
+        new online().execute();
         vip = (TextView) findViewById(R.id.vip);
         account = (TextView) findViewById(R.id.account);
         metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
-
-        new online().execute();
         builder = new AlertDialog.Builder(Movie_view.this);
         context = getApplication();
         viewfrist();
@@ -83,9 +83,6 @@ public class Movie_view extends AppCompatActivity {
 
     public void frist() {
         new login().execute();
-        movie_adapter = new movie_adapter(Movie_view.this);
-        tvdrama_adapter = new tvdrama_adapter(Movie_view.this);
-        online_adapter = new online_adapter(Movie_view.this);
 
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new Page1());
@@ -106,12 +103,9 @@ public class Movie_view extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -142,7 +136,6 @@ public class Movie_view extends AppCompatActivity {
 
             }
         });
-
 
 
         Button button1 = (Button) findViewById(R.id.button1);
@@ -188,7 +181,7 @@ public class Movie_view extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(Movie_view.this, Webview.class);
-                intent.putExtra("url", Setting.URL+"/VALLEY/vip.html");
+                intent.putExtra("url", Setting.URL + "/VALLEY/vip.html");
                 startActivity(intent);
 
             }
@@ -223,15 +216,34 @@ public class Movie_view extends AppCompatActivity {
         }
     };
 
+
+
+
+
     @Override
     public void onBackPressed() {
+
         if (i > 0) {
             Toast.makeText(Movie_view.this, "在按一次退出", Toast.LENGTH_SHORT).show();
             i--;
         } else {
-            System.exit(0);
+
+
+            offline.clear();
+            tv_drama.clear();
+            online_movie.clear();
+
+
+            super.onBackPressed();
+
+
+
+
+
 
         }
+
+
 
     }
 
@@ -250,7 +262,7 @@ public class Movie_view extends AppCompatActivity {
 
 
             String str = new gethttpcontent().return_contant(params[0]);
-            Log.e("version",str);
+            Log.e("version", str);
 
             JSONObject jsonObject = null;
             int version = 0;
@@ -385,11 +397,12 @@ public class Movie_view extends AppCompatActivity {
     class update_text extends AsyncTask<Void, Void, Void> {
 
         String str;
+
         @Override
         protected Void doInBackground(Void... params) {
 
             try {
-                JSONObject jsonObject = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/index/api/notice_m"));
+                JSONObject jsonObject = new JSONObject(new gethttpcontent().return_contant(Setting.URL + "/index/api/notice_m"));
                 str = jsonObject.getString("msg");
 
                 handler.sendEmptyMessage(1);
@@ -464,8 +477,8 @@ public class Movie_view extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Object... params) {
 
-            String test = new gethttpcontent().return_contant(Setting.URL+"/");
-            if (test.equals("ERROR")||test.indexOf("我是首页")==-1) {
+            String test = new gethttpcontent().return_contant(Setting.URL + "/");
+            if (test.equals("ERROR") || test.indexOf("我是首页") == -1) {
                 handler.sendEmptyMessage(1);
                 return false;
             } else {
@@ -479,7 +492,7 @@ public class Movie_view extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
             if (aVoid == true) {
-                new update().execute(Setting.URL+"/index/api/update_m");
+                new update().execute(Setting.URL + "/index/api/update_m");
             }
         }
 
