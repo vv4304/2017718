@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 /**
  * Created by admin on 2017/8/15.
@@ -17,15 +19,22 @@ import android.widget.GridView;
 
 public class Page2 extends Fragment {
 
+    public static LinearLayout offlineview;
+    public static GridView gridView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.page2, container, false);
 
-        GridView gridView = (GridView) view.findViewById(R.id.gridview2);
+        offlineview= (LinearLayout) view.findViewById(R.id.offlineview);
+        gridView = (GridView) view.findViewById(R.id.gridview);
+
+        Movie_view.tvdrama_adapter = new tvdrama_adapter(Movie_view.context);
+        offlineview.setVisibility(View.INVISIBLE);
         gridView.setAdapter(Movie_view.tvdrama_adapter);
+
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
