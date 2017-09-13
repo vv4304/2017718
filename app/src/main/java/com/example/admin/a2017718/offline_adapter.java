@@ -196,11 +196,10 @@ public class offline_adapter extends BaseAdapter {
 
         @Override
         protected Boolean doInBackground(Integer... params) {
-            Log.e("page3", "11111111111111111111");
 
             String contant = new gethttpcontent().return_contant(Setting.URL + "/user/movie/mlist?page=" + params[0]);
 
-            Log.e("aaa",contant);
+            Log.e("offline",contant);
             if (contant.indexOf("DOCTYPE") != -1 || contant.equals("ERROR")) {
                 Log.e("page3", "无法连接");
                 return false;

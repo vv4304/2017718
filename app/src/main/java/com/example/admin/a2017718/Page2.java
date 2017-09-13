@@ -27,7 +27,7 @@ public class Page2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.page2, container, false);
 
-        offlineview= (LinearLayout) view.findViewById(R.id.offlineview);
+        offlineview = (LinearLayout) view.findViewById(R.id.offlineview);
         gridView = (GridView) view.findViewById(R.id.gridview);
 
         Movie_view.tvdrama_adapter = new tvdrama_adapter(Movie_view.context);
@@ -39,13 +39,12 @@ public class Page2 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Log.e("A",String.valueOf(Movie_view.tv_drama.get(position).getImageurl()));
+                Log.e("A", String.valueOf(Movie_view.tv_drama.get(position).getImageurl()));
 
-                Intent intent=new Intent(Movie_view.context,PlayPlay.class);
-                intent.putExtra("url",Movie_view.tv_drama.get(position).getImageurl());
-               intent.putExtra("type","teleplay");
+                Intent intent = new Intent(Movie_view.context, PlayPlay.class);
+                intent.putExtra("url", Movie_view.tv_drama.get(position).getImageurl());
+                intent.putExtra("type", "teleplay");
                 startActivity(intent);
-
 
 
             }
@@ -55,5 +54,9 @@ public class Page2 extends Fragment {
         return view;
     }
 
-
+    @Override
+    public void onDestroyView() {
+        Movie_view.tv_drama.clear();
+        super.onDestroyView();
+    }
 }

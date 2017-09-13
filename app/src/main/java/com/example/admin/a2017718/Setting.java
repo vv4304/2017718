@@ -40,9 +40,6 @@ public class Setting extends AppCompatActivity {
         final LinearLayout frame= (LinearLayout) findViewById(R.id.submitframe);
         frame.setVisibility(View.GONE);
 
-
-
-
         ImageView back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,9 +130,6 @@ public class Setting extends AppCompatActivity {
 
     }
 
-
-
-
     class post extends AsyncTask<String,Void,String>
     {
 
@@ -154,7 +148,6 @@ public class Setting extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 
             return null;
         }

@@ -17,7 +17,8 @@ import android.widget.GridView;
 
 public class Page1 extends Fragment {
 
-   public GridView gridView;
+    public GridView gridView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -26,7 +27,6 @@ public class Page1 extends Fragment {
 
         Movie_view.offline_adapter = new offline_adapter(Movie_view.context);
 
-
         gridView = (GridView) view.findViewById(R.id.gridview);
         gridView.setAdapter(Movie_view.offline_adapter);
 
@@ -34,30 +34,19 @@ public class Page1 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), PlayPlay.class);
-                intent.putExtra("type","offline");
+                intent.putExtra("type", "offline");
                 intent.putExtra("id", String.valueOf(Movie_view.offline.get(position).getId()));
                 startActivity(intent);
-
 
             }
         });
 
-
         return view;
     }
 
-
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-        if (isVisibleToUser)
-        {
-
-
-
-        }
-
-
+    public void onDestroyView() {
+        Movie_view.offline.clear();
+        super.onDestroyView();
     }
 }

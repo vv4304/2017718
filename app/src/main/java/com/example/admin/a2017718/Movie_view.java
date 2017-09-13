@@ -216,10 +216,6 @@ public class Movie_view extends AppCompatActivity {
         }
     };
 
-
-
-
-
     @Override
     public void onBackPressed() {
 
@@ -227,7 +223,6 @@ public class Movie_view extends AppCompatActivity {
             Toast.makeText(Movie_view.this, "在按一次退出", Toast.LENGTH_SHORT).show();
             i--;
         } else {
-
 
             offline.clear();
             tv_drama.clear();
@@ -478,7 +473,7 @@ public class Movie_view extends AppCompatActivity {
         protected Boolean doInBackground(Object... params) {
 
             String test = new gethttpcontent().return_contant(Setting.URL + "/");
-            if (test.equals("ERROR") || test.indexOf("我是首页") == -1) {
+            if (test.equals("ERROR")) {
                 handler.sendEmptyMessage(1);
                 return false;
             } else {

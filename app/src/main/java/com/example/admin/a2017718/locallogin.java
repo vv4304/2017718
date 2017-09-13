@@ -155,8 +155,6 @@ public class locallogin {
                     }
 
                     if (re.getString("msg").equals("登陆成功")) {
-                        Log.e("login", "登录成功");
-
                         List<String> map = http.getHeaderFields().get("Set-Cookie");
                         Movie_view.uid_token = map.get(0).substring(0, map.get(0).indexOf(";")) + ";" + map.get(1).substring(0, map.get(1).indexOf(";"));
 

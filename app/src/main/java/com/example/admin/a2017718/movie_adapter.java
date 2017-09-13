@@ -34,7 +34,6 @@ public class movie_adapter extends BaseAdapter {
     int Page = 1;
     Context context;
 
-
     public movie_adapter(Context context) {
         this.context = context;
 
@@ -47,7 +46,6 @@ public class movie_adapter extends BaseAdapter {
         }
 
     }
-
 
     @Override
     public int getCount() {
@@ -68,33 +66,19 @@ public class movie_adapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (position == Movie_view.online_movie.size() - 1 && down != true) {
-
-
             new getitme().execute(Page);
             Page++;
-
-
         }
 
-
         convertView = LayoutInflater.from(context).inflate(R.layout.item, parent, false);
-
-
         TextView update = (TextView) convertView.findViewById(R.id.vip);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.image1);
         TextView name = (TextView) convertView.findViewById(R.id.name);
-
-
         update.setText(Movie_view.online_movie.get(position).getPay());
         name.setText(Movie_view.online_movie.get(position).getId());
-
-
         new loadimage().execute(Movie_view.online_movie.get(position).getId(), Movie_view.online_movie.get(position).getName(), imageView);
-
-
         return convertView;
     }
-
 
     class getitme extends AsyncTask<Object, Object, Boolean> {
 
@@ -106,9 +90,8 @@ public class movie_adapter extends BaseAdapter {
 
             String src = new gethttpcontent().return_contant("http://video.visha.cc/search?class=%E7%94%B5%E5%BD%B1&page=" + params[0]);
 
-            if(src.indexOf("DOCTYPE")!=-1||src.equals("ERROR"))
-            {
-                Log.e("page2","无法连接");
+            if (src.indexOf("DOCTYPE") != -1 || src.equals("ERROR")) {
+                Log.e("page3", "无法连接");
                 return false;
             }
 
@@ -119,30 +102,28 @@ public class movie_adapter extends BaseAdapter {
                 e.printStackTrace();
             }
 
+            try {
+                jsonArray = jsonObject.getJSONArray("rows");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
                 try {
-                    jsonArray = jsonObject.getJSONArray("rows");
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+
+                    Movie_view.online_movie.add(new movies(jsonObject.getString("title"), jsonObject.getString("update"), jsonObject.getString("image"), jsonObject.getString("url")));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
+            }
 
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    try {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-
-                        Movie_view.online_movie.add(new movies(jsonObject.getString("title"), jsonObject.getString("update"), jsonObject.getString("image"), jsonObject.getString("url")));
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
-
-
-                return true;
+            return true;
 
         }
 
@@ -155,7 +136,9 @@ public class movie_adapter extends BaseAdapter {
                     notifyDataSetChanged();
                 }
 
-            }else {Page3.offlineview.setVisibility(View.VISIBLE);}
+            } else {
+                Page3.offlineview.setVisibility(View.VISIBLE);
+            }
         }
     }
 
