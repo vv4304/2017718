@@ -3,7 +3,6 @@ package com.example.admin.a2017718;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -107,7 +106,7 @@ public class tvdrama_adapter extends BaseAdapter {
         @Override
         protected Boolean doInBackground(Integer... params) {
 
-            String src = new gethttpcontent().return_contant("http://video.visha.cc/search?class=%E7%94%B5%E8%A7%86%E5%89%A7&page=" + params[0]);
+            String src = new httpcontent().GET("http://video.visha.cc/search?class=%E7%94%B5%E8%A7%86%E5%89%A7&page=" + params[0],false);
 
             if(src.indexOf("DOCTYPE")!=-1||src.equals("ERROR"))
             {

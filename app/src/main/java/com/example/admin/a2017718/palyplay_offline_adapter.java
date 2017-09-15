@@ -121,13 +121,11 @@ public class palyplay_offline_adapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (Movie_view.ACCOUNT != null) {
-
-
                         if (PlayPlay.infometion.get(4).equals("1")) {
 
                             if (Movie_view.VIP == true) {
                                PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
-                                PlayPlay.ijk.setTitle("播放中。。");
+                                PlayPlay.ijk.setTitle("第"+(position+1)+"集");
                                 PlayPlay.ijk.setVideoUrl(PlayPlay.lists.get(position));
                                 PlayPlay.ijk.start();
                             } else {
@@ -138,10 +136,10 @@ public class palyplay_offline_adapter extends BaseAdapter {
                             }
 
                         } else {
-//                            loading.setVisibility(View.VISIBLE);
+                            PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
+                            PlayPlay.ijk.setTitle("第"+(position+1)+"集");
                             PlayPlay.ijk.setVideoUrl(PlayPlay.lists.get(position));
                             PlayPlay.ijk.start();
-
                         }
 
 

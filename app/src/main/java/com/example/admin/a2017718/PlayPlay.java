@@ -1,36 +1,14 @@
 package com.example.admin.a2017718;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
-import android.media.AudioManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.example.admin.ijkplayer.ijkvideo;
 
@@ -40,11 +18,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import tv.danmaku.ijk.media.player.IMediaPlayer;
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * Created by admin on 2017/7/24.
@@ -97,7 +70,7 @@ public class PlayPlay extends AppCompatActivity {
         protected Void doInBackground(String... params) {
 
 
-            String str = new gethttpcontent().return_contant("http://video.visha.cc/search/volume?url=" + params[0]);
+            String str = new httpcontent().GET("http://video.visha.cc/search/volume?url=" + params[0],false);
 
             try {
                 jsonObject = new JSONObject(str);
@@ -273,7 +246,7 @@ public class PlayPlay extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... params) {
 
-            String string = new gethttpcontent().return_contant(Setting.URL + "/user/movie/volume?vid=" + params[0]);
+            String string = new httpcontent().GET(Setting.URL + "/user/movie/volume?vid=" + params[0],false);
             Log.e("str", string);
             JSONObject jsonObject = null;
             JSONObject rows = null;
@@ -325,8 +298,6 @@ public class PlayPlay extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
-
             listView.setAdapter(new palyplay_offline_adapter(PlayPlay.this));
 
 

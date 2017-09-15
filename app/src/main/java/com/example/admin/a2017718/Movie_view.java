@@ -61,7 +61,7 @@ public class Movie_view extends AppCompatActivity {
     public static TextView vip;
     public static Boolean VIP = true;
     public static String ACCOUNT = null;
-    public static String uid_token;
+    public static String uid_token="null";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,13 +228,7 @@ public class Movie_view extends AppCompatActivity {
             tv_drama.clear();
             online_movie.clear();
 
-
             super.onBackPressed();
-
-
-
-
-
 
         }
 
@@ -256,7 +250,7 @@ public class Movie_view extends AppCompatActivity {
             }
 
 
-            String str = new gethttpcontent().return_contant(params[0]);
+            String str = new httpcontent().GET(params[0],false);
             Log.e("version", str);
 
             JSONObject jsonObject = null;
@@ -397,7 +391,7 @@ public class Movie_view extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             try {
-                JSONObject jsonObject = new JSONObject(new gethttpcontent().return_contant(Setting.URL + "/index/api/notice_m"));
+                JSONObject jsonObject = new JSONObject(new httpcontent().GET(Setting.URL + "/index/api/notice_m",false));
                 str = jsonObject.getString("msg");
 
                 handler.sendEmptyMessage(1);
@@ -472,7 +466,7 @@ public class Movie_view extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Object... params) {
 
-            String test = new gethttpcontent().return_contant(Setting.URL + "/");
+            String test = new httpcontent().GET(Setting.URL + "/",false);
             if (test.equals("ERROR")) {
                 handler.sendEmptyMessage(1);
                 return false;

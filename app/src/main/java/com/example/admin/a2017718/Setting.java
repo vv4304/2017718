@@ -137,7 +137,7 @@ public class Setting extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             try {
-                String string= new gethttpcontent().post(params[0],params[1]);
+                String string= new httpcontent().POST(params[0],params[1]);
                 JSONObject jsonObject=new JSONObject(string);
                 return jsonObject.getString("msg");
 

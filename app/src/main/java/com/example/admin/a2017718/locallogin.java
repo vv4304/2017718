@@ -84,7 +84,7 @@ public class locallogin {
             }
 
             try {
-                json = new gethttpcontent().readstream(input);
+                json = new httpcontent().readstream(input);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -144,7 +144,7 @@ public class locallogin {
             try {
                 if (http.getResponseCode() == 200) {
                     InputStream in = http.getInputStream();
-                    String str = new gethttpcontent().readstream(in);
+                    String str = new httpcontent().readstream(in);
                     Log.e("aaa", str);
 
                     JSONObject re = null;
@@ -165,7 +165,7 @@ public class locallogin {
                         getuser.setDoInput(true);
                         getuser.setRequestMethod("GET");
                         getuser.setConnectTimeout(5000);
-                        String login = new gethttpcontent().readstream(getuser.getInputStream());
+                        String login = new httpcontent().readstream(getuser.getInputStream());
 
                         if (login != null) {
 

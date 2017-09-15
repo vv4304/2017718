@@ -108,7 +108,7 @@ public class Login extends AppCompatActivity {
 
 
                     InputStream in = http.getInputStream();
-                    String str = new gethttpcontent().readstream(in);
+                    String str = new httpcontent().readstream(in);
                     JSONObject json = new JSONObject(str);
 
 
@@ -121,7 +121,7 @@ public class Login extends AppCompatActivity {
                         getuser.setDoInput(true);
                         getuser.setRequestMethod("GET");
                         getuser.setConnectTimeout(5000);
-                        String login = new gethttpcontent().readstream(getuser.getInputStream());
+                        String login = new httpcontent().readstream(getuser.getInputStream());
 
 
                         if (login != null) {
@@ -234,7 +234,7 @@ public class Login extends AppCompatActivity {
 
 
                     InputStream in = http.getInputStream();
-                    String str = new gethttpcontent().readstream(in);
+                    String str = new httpcontent().readstream(in);
                     JSONObject json = new JSONObject(str);
 
 

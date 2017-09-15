@@ -96,7 +96,7 @@ public class Search extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            String string = new gethttpcontent().return_contant("http://video.visha.cc/search?name=" + params[0]);
+            String string = new httpcontent().GET("http://video.visha.cc/search?name=" + params[0],false);
 
             Log.e("string", string);
             if (string == null) {

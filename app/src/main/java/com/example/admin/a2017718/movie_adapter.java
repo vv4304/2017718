@@ -88,7 +88,7 @@ public class movie_adapter extends BaseAdapter {
         @Override
         protected Boolean doInBackground(Object... params) {
 
-            String src = new gethttpcontent().return_contant("http://video.visha.cc/search?class=%E7%94%B5%E5%BD%B1&page=" + params[0]);
+            String src = new httpcontent().GET("http://video.visha.cc/search?class=%E7%94%B5%E5%BD%B1&page=" + params[0],false);
 
             if (src.indexOf("DOCTYPE") != -1 || src.equals("ERROR")) {
                 Log.e("page3", "无法连接");

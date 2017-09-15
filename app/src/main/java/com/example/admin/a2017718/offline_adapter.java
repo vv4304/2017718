@@ -197,7 +197,7 @@ public class offline_adapter extends BaseAdapter {
         @Override
         protected Boolean doInBackground(Integer... params) {
 
-            String contant = new gethttpcontent().return_contant(Setting.URL + "/user/movie/mlist?page=" + params[0]);
+            String contant = new httpcontent().GET(Setting.URL + "/user/movie/mlist?page=" + params[0],false);
 
             Log.e("offline",contant);
             if (contant.indexOf("DOCTYPE") != -1 || contant.equals("ERROR")) {

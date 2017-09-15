@@ -20,11 +20,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -169,7 +165,7 @@ public class plaplay_online_adapter extends BaseAdapter {
                 case "qq":
                     try {
                         Log.e("解析地址", qq.get(params[0]));
-                        string = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/user/movie/api?url=https" + qq.get(params[0]).substring(4))).getJSONArray("video").getJSONObject(2).getString("m3u8");
+                        string = new JSONObject(new httpcontent().GET(Setting.URL+"/user/movie/api?url=https" + qq.get(params[0]).substring(4),true)).getJSONArray("video").getJSONObject(2).getString("m3u8");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -177,7 +173,7 @@ public class plaplay_online_adapter extends BaseAdapter {
                 case "sohu":
                     try {
                         Log.e("解析地址", sohu.get(params[0]));
-                        string = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/user/movie/api?url=" + sohu.get(params[0]))).getJSONArray("video").getJSONObject(2).getString("m3u8");
+                        string = new JSONObject(new httpcontent().GET(Setting.URL+"/user/movie/api?url=" + sohu.get(params[0]),true)).getJSONArray("video").getJSONObject(2).getString("m3u8");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -186,9 +182,9 @@ public class plaplay_online_adapter extends BaseAdapter {
                     try {
                         Log.e("解析地址", youku.get(params[0]));
                         if (PlayPlay.type.equals("teleplay")) {
-                            string = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/user/movie/api?url=" + youku.get(params[0]))).getJSONArray("video").getJSONObject(3).getString("m3u8");
+                            string = new JSONObject(new httpcontent().GET(Setting.URL+"/user/movie/api?url=" + youku.get(params[0]),true)).getJSONArray("video").getJSONObject(3).getString("m3u8");
                         } else {
-                            string = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/user/movie/api?url=" + youku.get(params[0]))).getJSONArray("video").getJSONObject(2).getString("m3u8");
+                            string = new JSONObject(new httpcontent().GET(Setting.URL+"/user/movie/api?url=" + youku.get(params[0]),true)).getJSONArray("video").getJSONObject(2).getString("m3u8");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -198,7 +194,7 @@ public class plaplay_online_adapter extends BaseAdapter {
                 case "imgo":
                     try {
                         Log.e("解析地址", imgo.get(params[0]));
-                        string = new JSONObject(new gethttpcontent().return_contant(Setting.URL+"/user/movie/api?url=" + imgo.get(params[0]))).getJSONArray("video").getJSONObject(2).getString("m3u8");
+                        string = new JSONObject(new httpcontent().GET(Setting.URL+"/user/movie/api?url=" + imgo.get(params[0]),true)).getJSONArray("video").getJSONObject(2).getString("m3u8");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -350,7 +346,6 @@ public class plaplay_online_adapter extends BaseAdapter {
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             view = LayoutInflater.from(context).inflate(R.layout.select_item, parent, false);
-
             return new MyViewHolder(view);
         }
 
@@ -363,11 +358,9 @@ public class plaplay_online_adapter extends BaseAdapter {
                 public void onClick(View v) {
 
                     if (Movie_view.ACCOUNT != null) {
-
                         if (Movie_view.VIP == true) {
                             PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
-                            PlayPlay.ijk.setTitle("播放中。。");
-
+                            PlayPlay.ijk.setTitle("第"+(position+1)+"集");
                             new loadurl().execute(position);
                         } else {
                             Intent intent = new Intent(context, Webview.class);
