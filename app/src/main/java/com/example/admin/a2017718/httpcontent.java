@@ -13,10 +13,9 @@ import java.net.URL;
  * Created by admin on 2017/7/25.
  */
 
-public class gethttpcontent {
+public class httpcontent {
 
-    public String return_contant(String url) {
-
+    public String GET(String url, Boolean cookie) {
         InputStream inputStream;
         String contant = null;
         HttpURLConnection httpURLConnection = null;
@@ -25,20 +24,20 @@ public class gethttpcontent {
             httpURLConnection = (HttpURLConnection) new URL(url).openConnection();
             httpURLConnection.setConnectTimeout(3000);
             httpURLConnection.setReadTimeout(3000);
-            httpURLConnection.setRequestProperty("Cookie", Movie_view.uid_token);
+            if (cookie == true) {
+                httpURLConnection.setRequestProperty("Cookie", Movie_view.uid_token);
+            }
             httpURLConnection.setRequestMethod("GET");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
         try {
             code = httpURLConnection.getResponseCode();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         if (code == 200) {
             try {
                 inputStream = httpURLConnection.getInputStream();
@@ -60,7 +59,7 @@ public class gethttpcontent {
     }
 
 
-    public String post(String...str) throws IOException {
+    public String POST(String... str) throws IOException {
 
         String data = "call=" + str[0] + "&msg=" + str[1];
 
@@ -104,7 +103,6 @@ public class gethttpcontent {
 
         return null;
     }
-
 
     public String readstream(InputStream inputStream) throws IOException {
 
