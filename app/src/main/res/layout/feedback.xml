@@ -5,7 +5,6 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,46 +21,33 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="设置"
+            android:text="反馈"
             android:textColor="#FFFFFF"
             android:textSize="20dp" />
 
     </LinearLayout>
 
+    <TextView
+        android:textColor="#7EC0EE"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="你可以在这里输入你想要观看的影片或者写关于本app的一些问题,我们会尽快处理" />
+
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp" />
 
     <Button
         android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="#FF88FF"
-        android:text="提意见"
-        android:textColor="#FFFFFF" />
-
-
-    <Button
-        android:id="@+id/file"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="#FF88FF"
-        android:text="清理空间"
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="#FF88FF"
-        android:text="信院小站Q群：175853183"
-        android:textColor="#FFFFFF" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="本站所有资源来源于BT互联网,独播内容均为二次转码添加字幕压制!如有议意联系方式：vv4304@outlook.com" />
+        android:layout_margin="10dp"
+        android:background="#7CFC00"
+        android:text="提交"
+        android:textColor="#8B2323" />
 
 
 </LinearLayout>

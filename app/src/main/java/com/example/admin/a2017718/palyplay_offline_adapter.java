@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +48,6 @@ public class palyplay_offline_adapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (position == 0) {
-
             convertView = LayoutInflater.from(context).inflate(R.layout.head, parent, false);
             TextView name = (TextView) convertView.findViewById(R.id.name);
             TextView pay = (TextView) convertView.findViewById(R.id.number);
@@ -55,14 +56,12 @@ public class palyplay_offline_adapter extends BaseAdapter {
             name.setText(PlayPlay.infometion.get(0));
             type.setText("豆瓣评分：" + PlayPlay.infometion.get(1) + "   " + "上映日期：" + PlayPlay.infometion.get(3));
             if (PlayPlay.infometion.get(4).equals("1")) {
-                pay.setText("VIP可免流观看");
+                pay.setText("需要好人卡才可免流观看");
             } else {
-                pay.setText("免费免流试看");
+                pay.setText("免流试看");
             }
 
-
         }
-
 
         if (position == 1) {
             convertView = LayoutInflater.from(context).inflate(R.layout.selectpage, parent, false);
@@ -74,13 +73,11 @@ public class palyplay_offline_adapter extends BaseAdapter {
             recyclerView.setAdapter(henadatpter);
         }
 
-
         if (position == 2) {
             convertView = LayoutInflater.from(context).inflate(R.layout.introduction, parent, false);
             TextView introduction = (TextView) convertView.findViewById(R.id.introduction);
             introduction.setText(PlayPlay.infometion.get(2));
         }
-
         return convertView;
     }
 
@@ -97,7 +94,6 @@ public class palyplay_offline_adapter extends BaseAdapter {
     }
 
     class Henadatpter extends RecyclerView.Adapter<MyViewHolder> {
-
         View view;
         List<String> str = new ArrayList<>();
 
@@ -121,33 +117,50 @@ public class palyplay_offline_adapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (Movie_view.ACCOUNT != null) {
-                        if (PlayPlay.infometion.get(4).equals("1")) {
 
+                        if (PlayPlay.infometion.get(4).equals("1")) {
                             if (Movie_view.VIP == true) {
-                               PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
-                                PlayPlay.ijk.setTitle("第"+(position+1)+"集");
+                                Toast.makeText(context, "正在为你播放，加载可能有点慢请稍等", Toast.LENGTH_SHORT).show();
+                                PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
+                                PlayPlay.ijk.setTitle("第" + (position + 1) + "集");
                                 PlayPlay.ijk.setVideoUrl(PlayPlay.lists.get(position));
                                 PlayPlay.ijk.start();
                             } else {
+                                Toast.makeText(context, "此影片需要好人卡才能播放", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(context, Webview.class);
-                                intent.putExtra("url", Setting.URL+"/VALLEY/vip.html");
+                                intent.putExtra("url", Setting.URL + "/user/movie/movie_vip");
                                 context.startActivity(intent);
-
                             }
 
                         } else {
+                            Toast.makeText(context, "正在为你播放，加载可能有点慢请稍等", Toast.LENGTH_SHORT).show();
                             PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
-                            PlayPlay.ijk.setTitle("第"+(position+1)+"集");
+                            PlayPlay.ijk.setTitle("第" + (position + 1) + "集");
                             PlayPlay.ijk.setVideoUrl(PlayPlay.lists.get(position));
                             PlayPlay.ijk.start();
                         }
+
+
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                /*
+                                String statistics =new httpcontent().GET("http://sv.icodef.com/user/movie/statistics?vid="+PlayPlay.id,true);
+                                Log.e("statistics",PlayPlay.id+"/"+statistics);
+*/
+                                try {
+                                    new httpcontent().POST("影视播放点击记录", PlayPlay.infometion.get(0) + "||||||||||||||||||||");
+                                } catch (IOException e) {
+                                }
+
+                            }
+                        }.start();
 
 
                     } else {
                         Intent intent = new Intent(context, Login.class);
                         context.startActivity(intent);
                     }
-
 
                 }
             });

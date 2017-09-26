@@ -53,7 +53,7 @@ public class Movie_view extends AppCompatActivity {
     public static offline_adapter offline_adapter;
     public static tvdrama_adapter tvdrama_adapter;
     public static movie_adapter movie_adapter;
-    public ViewPager viewPager;
+    ViewPager viewPager;
     ImageView line1;
     DisplayMetrics metric;
     public static Context context;
@@ -61,7 +61,8 @@ public class Movie_view extends AppCompatActivity {
     public static TextView vip;
     public static Boolean VIP = true;
     public static String ACCOUNT = null;
-    public static String uid_token="null";
+    public static String uid_token = "null";
+    String update_url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +78,6 @@ public class Movie_view extends AppCompatActivity {
         context = getApplication();
         viewfrist();
         button();
-
-
     }
 
     public void frist() {
@@ -104,6 +103,7 @@ public class Movie_view extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -113,8 +113,6 @@ public class Movie_view extends AppCompatActivity {
     }
 
     public void button() {
-
-
         ImageView setting = (ImageView) findViewById(R.id.setting);
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +169,7 @@ public class Movie_view extends AppCompatActivity {
                     VIP = false;
                     ACCOUNT = null;
                     account.setText("点击登录");
-                    vip.setText("开通VIP");
+                    vip.setText("获取好人卡");
                 }
 
             }
@@ -181,12 +179,11 @@ public class Movie_view extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent(Movie_view.this, Webview.class);
-                intent.putExtra("url", Setting.URL + "/VALLEY/vip.html");
+                intent.putExtra("url", Setting.URL + "/user/movie/movie_vip");
                 startActivity(intent);
 
             }
         });
-
 
     }
 
@@ -211,36 +208,53 @@ public class Movie_view extends AppCompatActivity {
             ACCOUNT = msg.getData().getString("account");
             Log.e("VIP", VIP.toString());
             if (VIP == true) {
-                vip.setText("VIP");
+                vip.setText("好人卡");
             }
         }
     };
 
-    @Override
-    public void onBackPressed() {
+    public Handler note = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 0) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Movie_view.this);
+                alertDialogBuilder.setMessage("无法连接到服务,请检查是否连接上校园网WIFI\"HNIU\"！");
+                alertDialogBuilder.setCancelable(false);
+                alertDialogBuilder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
 
-        if (i > 0) {
-            Toast.makeText(Movie_view.this, "在按一次退出", Toast.LENGTH_SHORT).show();
-            i--;
-        } else {
 
-            offline.clear();
-            tv_drama.clear();
-            online_movie.clear();
+            if (msg.what == 9) {
+                LayoutInflater layoutInflater = getLayoutInflater();
+                View view = layoutInflater.inflate(R.layout.dialog, null);
+                builder.setView(view);
 
-            super.onBackPressed();
+
+                builder.setCancelable(false);
+                alertDialog = builder.create();
+                alertDialog.show();
+            }
+
 
         }
+    };
 
 
+    class examine_update extends AsyncTask<String, Void, Boolean> {
 
-    }
-
-    class update extends AsyncTask<String, Void, Integer> {
 
         @Override
-        protected Integer doInBackground(String... params) {
-
+        protected Boolean doInBackground(String... params) {
+            JSONObject jsonObject = null;
+            int version = 0;
             PackageManager packageManager = getPackageManager();
             PackageInfo packageInfo = null;
             try {
@@ -249,131 +263,122 @@ public class Movie_view extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-
-            String str = new httpcontent().GET(params[0],false);
+            String str = new httpcontent().GET(params[0], false);
             Log.e("version", str);
 
-            JSONObject jsonObject = null;
-            int version = 0;
-            String url = null;
-            InputStream inputStream = null;
-            URL url1 = null;
-            OutputStream outputStream = null;
-            byte[] bytes = new byte[1024];
-            int len = 0;
 
             try {
                 jsonObject = new JSONObject(str);
                 version = jsonObject.getInt("v");
-                url = jsonObject.getString("u");
-
+                update_url = jsonObject.getString("u");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
 
             if (version > packageInfo.versionCode) {
-
-                handler.sendEmptyMessage(1);
-
-                try {
-                    url1 = new URL(url);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    inputStream = url1.openStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    outputStream = openFileOutput("1.apk", MODE_PRIVATE);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-
-                try {
-                    while ((len = inputStream.read(bytes)) > 0) {
-                        outputStream.write(bytes, 0, len);
-
-
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                String[] command = {"chmod", "777", new File(getFilesDir() + "/1.apk").getPath()};
-                ProcessBuilder builder = new ProcessBuilder(command);
-                try {
-                    builder.start();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                if (Build.VERSION.SDK_INT <= 23) {
-
-                    handler.sendEmptyMessage(0);
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(Uri.fromFile(new File(getFilesDir() + "/1.apk")), "application/vnd.android.package-archive");
-                    startActivity(intent);
-
-
-                } else {
-
-                    handler.sendEmptyMessage(0);
-
-                    File file = new File(getFilesDir() + "/1.apk");
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.setDataAndType(FileProvider.getUriForFile(Movie_view.this, "com.example.admin.a2017718", file), "application/vnd.android.package-archive");
-                    startActivity(intent);
-
-
-                }
-
-                finish();
-
-
-                return 1;
+                return true;
             }
-            return 0;
+
+            return false;
         }
 
 
         @Override
-        protected void onPostExecute(Integer aVoid) {
+        protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
-            if (aVoid == 0) {
-                new update_text().execute();
+            if (aVoid == true) {
+                new update().execute();
             }
+
         }
+    }
+
+    class update extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            handler.sendEmptyMessage(1);
+            InputStream inputStream = null;
+            URL url = null;
+            OutputStream outputStream = null;
+            byte[] bytes = new byte[1024];
+            int len = 0;
+
+
+            try {
+                url = new URL(update_url);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                inputStream = url.openStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                outputStream = openFileOutput("1.apk", MODE_PRIVATE);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                while ((len = inputStream.read(bytes)) > 0) {
+                    outputStream.write(bytes, 0, len);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            String[] command = {"chmod", "777", new File(getFilesDir() + "/1.apk").getPath()};
+            ProcessBuilder builder = new ProcessBuilder(command);
+            try {
+                builder.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (Build.VERSION.SDK_INT <= 23) {
+                handler.sendEmptyMessage(0);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(new File(getFilesDir() + "/1.apk")), "application/vnd.android.package-archive");
+                startActivity(intent);
+
+            } else {
+                handler.sendEmptyMessage(0);
+                File file = new File(getFilesDir() + "/1.apk");
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setDataAndType(FileProvider.getUriForFile(Movie_view.this, "com.example.admin.a2017718", file), "application/vnd.android.package-archive");
+                startActivity(intent);
+
+            }
+
+            finish();
+
+
+            return null;
+        }
+
 
         Handler handler = new Handler() {
 
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
-
                     LayoutInflater layoutInflater = getLayoutInflater();
                     View view = layoutInflater.inflate(R.layout.dialog, null);
                     builder.setView(view);
-
-
                     builder.setCancelable(false);
                     alertDialog = builder.create();
                     alertDialog.show();
                 }
 
                 if (msg.what == 0) {
-
                     alertDialog.dismiss();
-
                 }
 
 
@@ -383,6 +388,7 @@ public class Movie_view extends AppCompatActivity {
 
     }
 
+
     class update_text extends AsyncTask<Void, Void, Void> {
 
         String str;
@@ -391,9 +397,8 @@ public class Movie_view extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             try {
-                JSONObject jsonObject = new JSONObject(new httpcontent().GET(Setting.URL + "/index/api/notice_m",false));
+                JSONObject jsonObject = new JSONObject(new httpcontent().GET(Setting.URL + "/index/api/notice_m", false));
                 str = jsonObject.getString("msg");
-
                 handler.sendEmptyMessage(1);
 
 
@@ -403,6 +408,12 @@ public class Movie_view extends AppCompatActivity {
             return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            frist();
+            //new examine_update().execute(Setting.URL + "/index/api/update_m");
+        }
 
         Handler handler = new Handler() {
 
@@ -419,6 +430,7 @@ public class Movie_view extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             alertDialog.dismiss();
+                            new examine_update().execute(Setting.URL + "/index/api/update_m");
                         }
                     });
                     builder.setView(view);
@@ -431,11 +443,6 @@ public class Movie_view extends AppCompatActivity {
         };
 
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            frist();
-        }
     }
 
     class login extends AsyncTask<Void, Void, Boolean> {
@@ -454,7 +461,6 @@ public class Movie_view extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-
             if (aBoolean == true) {
                 Toast.makeText(Movie_view.this, "登录成功", Toast.LENGTH_SHORT);
             }
@@ -465,10 +471,9 @@ public class Movie_view extends AppCompatActivity {
     class online extends AsyncTask<Object, Object, Boolean> {
         @Override
         protected Boolean doInBackground(Object... params) {
-
-            String test = new httpcontent().GET(Setting.URL + "/",false);
+            String test = new httpcontent().GET(Setting.URL + "/", false);
             if (test.equals("ERROR")) {
-                handler.sendEmptyMessage(1);
+                note.sendEmptyMessage(0);
                 return false;
             } else {
                 return true;
@@ -481,31 +486,25 @@ public class Movie_view extends AppCompatActivity {
             super.onPostExecute(aVoid);
 
             if (aVoid == true) {
-                new update().execute(Setting.URL + "/index/api/update_m");
+                // new update().execute(Setting.URL + "/index/api/update_m");
+                new update_text().execute();
             }
         }
+    }
 
-        Handler handler = new Handler() {
-
-            @Override
-            public void handleMessage(Message msg) {
-                if (msg.what == 1) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Movie_view.this);
-                    alertDialogBuilder.setMessage("请连接校园网WIFI\"HNIU\"！");
-                    alertDialogBuilder.setCancelable(false);
-                    alertDialogBuilder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-                }
-
-            }
-        };
+    public void onBackPressed() {
+        if (i > 0) {
+            Toast.makeText(Movie_view.this, "在按一次退出", Toast.LENGTH_SHORT).show();
+            i--;
+        } else {
+            offline.clear();
+            tv_drama.clear();
+            online_movie.clear();
+            super.onBackPressed();
+        }
 
 
     }
+
+
 }

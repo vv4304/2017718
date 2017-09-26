@@ -50,7 +50,6 @@ public class Search extends AppCompatActivity {
                 finish();
             }
         });
-
         searchok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

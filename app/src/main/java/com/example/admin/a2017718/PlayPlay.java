@@ -33,11 +33,9 @@ public class PlayPlay extends AppCompatActivity {
     public static List<String> sohu = new ArrayList<>();
     public static List<String> imgo = new ArrayList<>();
     public static List<CharSequence> list = new ArrayList<>();
-
     private ListView listView;
-    public static String type;
+    public static String id,type;
     private boolean isFull = false;
-
     public static ijkvideo ijk;
 
     @Override
@@ -56,7 +54,8 @@ public class PlayPlay extends AppCompatActivity {
         listView.setLayoutParams(lp);
 
         if (type.equals("offline")) {
-            new offlinemovie().execute(intent.getStringExtra("id"));
+            new offlinemovie().execute(id=intent.getStringExtra("id"));
+
         } else {
             new onlinemovie().execute(intent.getStringExtra("url"));
         }
@@ -69,17 +68,13 @@ public class PlayPlay extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... params) {
 
-
             String str = new httpcontent().GET("http://video.visha.cc/search/volume?url=" + params[0],false);
-
             try {
                 jsonObject = new JSONObject(str);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             Log.e("ssss", str + "  /  " + params[0]);
-
             try {
                 infometion.add(jsonObject.getString("title"));
                 infometion.add(jsonObject.getString("year"));
@@ -90,20 +85,15 @@ public class PlayPlay extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
             try {
                 rows = jsonObject.getJSONObject("rows");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             if (rows == null) {
                 return null;
             }
-
             list.clear();
-
             /*
             if (rows.has("qq")) {
                 list.add("腾讯");
@@ -118,126 +108,78 @@ public class PlayPlay extends AppCompatActivity {
                     }
 
                     if (type.equals("movie")) {
-
                         JSONObject jsonObject = rows.getJSONObject("qq");
                         qq.add(jsonObject.getString("url"));
-
-
                     }
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 */
-
             if (rows.has("youku")) {
-
                 list.add("优酷");
-
                 try {
-
                     if (type.equals("teleplay")) {
                         JSONArray jsonArray = rows.getJSONArray("youku");
                         for (int i = 0; i < jsonArray.length(); i++) {
-
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             youku.add(jsonObject.getString("url"));
-
                         }
-
                     }
-
-
                     if (type.equals("movie")) {
-
                         JSONObject jsonObject = rows.getJSONObject("youku");
                         youku.add(jsonObject.getString("url"));
-
-
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
             if (rows.has("sohu")) {
                 list.add("搜狐");
                 try {
-
-
                     if (type.equals("teleplay")) {
                         JSONArray jsonArray = rows.getJSONArray("sohu");
                         for (int i = 0; i < jsonArray.length(); i++) {
-
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             sohu.add(jsonObject.getString("url"));
-
                         }
-
                     }
-
                     if (type.equals("movie")) {
-
                         JSONObject jsonObject = rows.getJSONObject("sohu");
                         sohu.add(jsonObject.getString("url"));
-
-
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
             if (rows.has("imgo")) {
                 list.add("芒果");
-
-
                 try {
-
                     if (type.equals("teleplay")) {
                         JSONArray jsonArray = rows.getJSONArray("imgo");
                         for (int i = 0; i < jsonArray.length(); i++) {
-
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             imgo.add(jsonObject.getString("url"));
                         }
                     }
-
                     if (type.equals("movie")) {
-
                         JSONObject jsonObject = rows.getJSONObject("imgo");
                         imgo.add(jsonObject.getString("url"));
-
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
-
             for (int i = 0; i < list.size(); i++) {
                 Log.e("qq", (String) list.get(i));
-
-
             }
             return null;
         }
 
-
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
             listView.setAdapter(new plaplay_online_adapter(PlayPlay.this));
         }
     }
@@ -287,20 +229,14 @@ public class PlayPlay extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
-
             return null;
         }
-
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             listView.setAdapter(new palyplay_offline_adapter(PlayPlay.this));
-
-
         }
     }
 

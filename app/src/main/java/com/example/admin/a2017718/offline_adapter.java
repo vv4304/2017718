@@ -22,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -82,7 +83,6 @@ public class offline_adapter extends BaseAdapter {
 
         if (Movie_view.offline.get(position).getPay().equals("0")) {
             vip.setVisibility(View.GONE);
-
         }
 
 
@@ -96,100 +96,80 @@ public class offline_adapter extends BaseAdapter {
         String url = null;
         URL Url;
         ImageView imageView;
+        HttpURLConnection urlcon = null;
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
 
         @Override
         protected String doInBackground(Object... params) {
-
             id = (String) params[0];
             url = (String) params[1];
             imageView = (ImageView) params[2];
 
-
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-
             File file = new File(contexts.getFilesDir() + "/" + id + ".jpg");
-            if (file.exists()) {
-                return id.toString();
-            } else {
 
-
-                try {
-                    Url = new URL(url);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-
-
-                try {
-                    inputStream = Url.openStream();
-                } catch (IOException e) {
-                    Log.e("Error", "inputstream");
-                }
-
-
-                try {
-                    outputStream = contexts.openFileOutput(id + ".jpg", contexts.MODE_PRIVATE);
-                } catch (FileNotFoundException e) {
-                    Log.e("Error", "outputstream");
-                }
-
-
-                byte[] by = new byte[1024];
-                int len = 0;
-
-
-                try {
-                    while ((len = inputStream.read(by)) > 0) {
-                        outputStream.write(by, 0, len);
-                    }
-
-
-                } catch (IOException e) {
-                    Log.e("Error", "write");
-                }
-
-
-                try {
-                    inputStream.close();
-                    outputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                return params[0].toString();
-
+            try {
+                Url = new URL(url);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
             }
 
+            if (file.exists()) {
+                if (file.length() > 3) {
+                    return id;
+                } else {
+                    writer();
+                }
+                return id;
+            } else {
+                writer();
+            }
+
+            return id;
 
         }
 
 
+        private void writer() {
+            try {
+                inputStream = Url.openStream();
+            } catch (IOException e) {
+                Log.e("Error", "inputstream");
+            }
+            try {
+                outputStream = contexts.openFileOutput(id + ".jpg", contexts.MODE_PRIVATE);
+            } catch (FileNotFoundException e) {
+                Log.e("Error", "outputstream");
+            }
+            byte[] by = new byte[1024];
+            int len = 0;
+            try {
+                while ((len = inputStream.read(by)) > 0) {
+                    outputStream.write(by, 0, len);
+                }
+            } catch (IOException e) {
+                Log.e("Error", "write");
+            }
+            try {
+                inputStream.close();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         @Override
         protected void onPostExecute(String s) {
 
-
             FileInputStream fileInputStream = null;
-
-
             try {
                 fileInputStream = new FileInputStream(contexts.getFilesDir() + "/" + s + ".jpg");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-
-
             Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
             imageView.setImageBitmap(bitmap);
-
-
         }
-
-
     }
-
 
     class movie_getitem extends AsyncTask<Integer, Object, Boolean> {
 
@@ -197,15 +177,12 @@ public class offline_adapter extends BaseAdapter {
         @Override
         protected Boolean doInBackground(Integer... params) {
 
-            String contant = new httpcontent().GET(Setting.URL + "/user/movie/mlist?page=" + params[0],false);
-
-            Log.e("offline",contant);
+            String contant = new httpcontent().GET(Setting.URL + "/user/movie/mlist?page=" + params[0], false);
+            Log.e("offline", contant);
             if (contant.indexOf("DOCTYPE") != -1 || contant.equals("ERROR")) {
                 Log.e("page3", "无法连接");
                 return false;
             }
-
-
             if (contant.indexOf("rows") != -1) {
                 try {
                     JSONObject jsonObject = new JSONObject(contant);
@@ -214,23 +191,17 @@ public class offline_adapter extends BaseAdapter {
                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         Movie_view.offline.add(new movies(jsonObject1.getString("vid"), jsonObject1.getString("pay"), jsonObject1.getString("name"), jsonObject1.getString("image_url")));
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             } else {
                 down = true;
             }
-
             return true;
         }
-
         @Override
         protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
-
 
             if (aVoid == true) {
                 if (page == 2) {
@@ -243,6 +214,4 @@ public class offline_adapter extends BaseAdapter {
 
         }
     }
-
-
 }

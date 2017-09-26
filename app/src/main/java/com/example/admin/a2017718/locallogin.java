@@ -28,7 +28,6 @@ import static com.example.admin.a2017718.Movie_view.context;
 
 public class locallogin {
 
-
     public Boolean writelogin(String account, String password) {
         FileOutputStream fileOutputStream = null;
         String data = null;

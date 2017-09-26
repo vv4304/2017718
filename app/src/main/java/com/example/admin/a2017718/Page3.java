@@ -28,12 +28,9 @@ public class Page3 extends Fragment {
         View view = inflater.inflate(R.layout.page3, container, false);
         offlineview = (LinearLayout) view.findViewById(R.id.offlineview);
         gridView = (GridView) view.findViewById(R.id.gridview);
-
         Movie_view.movie_adapter = new movie_adapter(Movie_view.context);
         offlineview.setVisibility(View.INVISIBLE);
         gridView.setAdapter(Movie_view.movie_adapter);
-
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -44,10 +41,8 @@ public class Page3 extends Fragment {
                 startActivity(intent);
             }
         });
-
         return view;
     }
-
     @Override
     public void onDestroyView() {
         Movie_view.online_movie.clear();

@@ -40,18 +40,15 @@ import static com.example.admin.a2017718.PlayPlay.youku;
  */
 
 public class plaplay_online_adapter extends BaseAdapter {
-
     LayoutInflater inflater;
     RecyclerView recyclerView;
     Spinner sp;
     Context context;
     String select;
     Henadatpter henadatpter = null;
-
     plaplay_online_adapter(Context context) {
         this.context = context;
     }
-
 
     @Override
     public int getCount() {
@@ -154,7 +151,6 @@ public class plaplay_online_adapter extends BaseAdapter {
         return convertView;
     }
 
-
     class loadurl extends AsyncTask<Integer, Void, String> {
         String string = null;
 
@@ -234,14 +230,13 @@ public class plaplay_online_adapter extends BaseAdapter {
                 ijk.setVideoUrl(aVoid);
                 ijk.start();
             } else {
-                Toast.makeText(context, "错误", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "线路维护中,结束的时候公告将会通知。。", Toast.LENGTH_LONG).show();
             }
 
         }
 
 
     }
-
 
     public Boolean werter(String url) {
         Log.e("Error", url);
@@ -318,7 +313,6 @@ public class plaplay_online_adapter extends BaseAdapter {
 
     }
 
-
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         Button mTitle;
@@ -329,26 +323,19 @@ public class plaplay_online_adapter extends BaseAdapter {
         }
 
     }
-
     class Henadatpter extends RecyclerView.Adapter<MyViewHolder> {
-
-
         View view;
-
-
         List<String> str = new ArrayList<>();
 
         public Henadatpter(List<String> str) {
             this.str = str;
             Log.e("str", String.valueOf(str.size()));
         }
-
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             view = LayoutInflater.from(context).inflate(R.layout.select_item, parent, false);
             return new MyViewHolder(view);
         }
-
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
 
@@ -362,15 +349,17 @@ public class plaplay_online_adapter extends BaseAdapter {
                             PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
                             PlayPlay.ijk.setTitle("第"+(position+1)+"集");
                             new loadurl().execute(position);
+                            Toast.makeText(context,"正在为你播放，加载可能有点慢请稍等",Toast.LENGTH_SHORT).show();
+
+
                         } else {
+                            Toast.makeText(Movie_view.context,"需要好人卡才能播放此剧",Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(context, Webview.class);
-                            intent.putExtra("url", Setting.URL+"/VALLEY/vip.html");
+                            intent.putExtra("url", Setting.URL+"/user/movie/movie_vip");
                             context.startActivity(intent);
-
-
                         }
-
                     } else {
+                        Toast.makeText(context,"需要先登录",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, Login.class);
                         context.startActivity(intent);
                     }
@@ -386,6 +375,5 @@ public class plaplay_online_adapter extends BaseAdapter {
             return str.size();
         }
     }
-
 
 }

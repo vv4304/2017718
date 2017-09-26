@@ -45,8 +45,6 @@ public class Page2 extends Fragment {
                 intent.putExtra("url", Movie_view.tv_drama.get(position).getImageurl());
                 intent.putExtra("type", "teleplay");
                 startActivity(intent);
-
-
             }
         });
 

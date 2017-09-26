@@ -15,12 +15,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new threat().start();
-       startActivity(new Intent(MainActivity.this, Movie_view.class));
-       finish();
+        startActivity(new Intent(MainActivity.this, Movie_view.class));
+        finish();
     }
-
-
-
 
 
 }

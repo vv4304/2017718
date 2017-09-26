@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="20dp"
-            android:text="一直在转圈？等10秒吧\nヾ(。￣□￣)ﾂ゜゜゜"
+            android:text="blablabla\nヾ(。￣□￣)ﾂ゜゜゜"
             android:textColor="#ffffff"
             android:textSize="10dp" />
 

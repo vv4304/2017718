@@ -37,7 +37,7 @@
                     android:paddingLeft="6dp"
                     android:paddingRight="6dp"
                     android:paddingTop="3dp"
-                    android:text="开通VIP" />
+                    android:text="获取好人卡" />
 
                 <TextView
                     android:id="@+id/account"
@@ -116,14 +116,22 @@
     </LinearLayout>
 
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
 
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp">
 
-    </android.support.v4.view.ViewPager>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp">
+
+        </android.support.v4.view.ViewPager>
+
+
+
+
+
+
 
 
 </LinearLayout>

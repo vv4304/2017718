@@ -36,15 +36,10 @@ public class movie_adapter extends BaseAdapter {
 
     public movie_adapter(Context context) {
         this.context = context;
-
         if (Movie_view.online_movie.size() == 0) {
-
             new getitme().execute(Page);
             Page++;
-
-
         }
-
     }
 
     @Override
@@ -88,13 +83,11 @@ public class movie_adapter extends BaseAdapter {
         @Override
         protected Boolean doInBackground(Object... params) {
 
-            String src = new httpcontent().GET("http://video.visha.cc/search?class=%E7%94%B5%E5%BD%B1&page=" + params[0],false);
-
+            String src = new httpcontent().GET("http://video.visha.cc/search?class=%E7%94%B5%E5%BD%B1&page=" + params[0], false);
             if (src.indexOf("DOCTYPE") != -1 || src.equals("ERROR")) {
                 Log.e("page3", "无法连接");
                 return false;
             }
-
 
             try {
                 jsonObject = new JSONObject(src);
@@ -113,18 +106,13 @@ public class movie_adapter extends BaseAdapter {
 
                 try {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-
                     Movie_view.online_movie.add(new movies(jsonObject.getString("title"), jsonObject.getString("update"), jsonObject.getString("image"), jsonObject.getString("url")));
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }
-
             return true;
-
         }
 
         @Override
@@ -135,7 +123,6 @@ public class movie_adapter extends BaseAdapter {
                 if (Page == 2) {
                     notifyDataSetChanged();
                 }
-
             } else {
                 Page3.offlineview.setVisibility(View.VISIBLE);
             }
@@ -195,13 +182,9 @@ public class movie_adapter extends BaseAdapter {
                     while ((len = inputStream.read(by)) > 0) {
                         outputStream.write(by, 0, len);
                     }
-
-
                 } catch (IOException e) {
                     Log.e("Error", "write");
                 }
-
-
                 try {
                     inputStream.close();
                     outputStream.close();
@@ -210,32 +193,19 @@ public class movie_adapter extends BaseAdapter {
                 }
 
                 return params[0].toString();
-
             }
-
-
         }
-
 
         @Override
         protected void onPostExecute(String s) {
-
             FileInputStream fileInputStream = null;
             try {
                 fileInputStream = new FileInputStream(context.getFilesDir() + "/" + s + ".jpg");
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-
             Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
             imageView.setImageBitmap(bitmap);
         }
-
-
     }
-
-
 }
-
-
-

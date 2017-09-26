@@ -5,14 +5,10 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
-
-
     <ListView
         android:id="@+id/playlistview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="#ff88ff"
         android:dividerHeight="3dp"></ListView>
-
-
 </LinearLayout>

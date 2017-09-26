@@ -1,5 +1,6 @@
 package com.example.admin.a2017718;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,15 +31,11 @@ import java.io.InputStream;
 public class Setting extends AppCompatActivity {
 
     public static final String URL = "http://sv.icodef.com/";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting);
 
-
-        final LinearLayout frame= (LinearLayout) findViewById(R.id.submitframe);
-        frame.setVisibility(View.GONE);
 
         ImageView back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -57,23 +54,28 @@ public class Setting extends AppCompatActivity {
             }
         });
 
-
         Button submit= (Button) findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                frame.setVisibility(View.VISIBLE);
+
+                if(Movie_view.ACCOUNT!=null)
+                {
+                    Intent intent=new Intent(Setting.this, com.example.admin.a2017718.feedback.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(Setting.this,"你没有登录，无法发送反馈",Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
 
-        Button issubmit= (Button) findViewById(R.id.issubmit);
-        issubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText editText= (EditText) findViewById(R.id.contant);
-                new post().execute(Movie_view.ACCOUNT,editText.getText().toString());
-            }
-        });
+
+
+
+
 
 
     }
@@ -128,40 +130,6 @@ public class Setting extends AppCompatActivity {
         }
 
 
-    }
-
-    class post extends AsyncTask<String,Void,String>
-    {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-                String string= new httpcontent().POST(params[0],params[1]);
-                JSONObject jsonObject=new JSONObject(string);
-                return jsonObject.getString("msg");
-
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if(s!=null) {
-                Toast.makeText(Setting.this, s, Toast.LENGTH_SHORT).show();
-            }
-
-
-        }
     }
 
 

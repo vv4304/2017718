@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 /**
  * Created by admin on 2017/8/14.
@@ -29,7 +32,6 @@ public class Page1 extends Fragment {
 
         gridView = (GridView) view.findViewById(R.id.gridview);
         gridView.setAdapter(Movie_view.offline_adapter);
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -40,6 +42,8 @@ public class Page1 extends Fragment {
 
             }
         });
+
+
 
         return view;
     }
