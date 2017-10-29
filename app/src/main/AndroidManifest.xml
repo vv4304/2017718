@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo"
-        android:label="信院影视"
+        android:label="信院影视库"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -23,6 +23,8 @@
         <activity android:name=".Setting"/>
         <activity android:name=".Search"/>
         <activity android:name=".feedback"/>
+        <activity android:name=".user"/>
+        <activity android:name=".Game1"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

@@ -58,11 +58,11 @@ public class Movie_view extends AppCompatActivity {
     DisplayMetrics metric;
     public static Context context;
     public static TextView account;
-    public static TextView vip;
     public static Boolean VIP = true;
     public static String ACCOUNT = null;
     public static String uid_token = "null";
     String update_url;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class Movie_view extends AppCompatActivity {
         setContentView(R.layout.content);
 
         new online().execute();
-        vip = (TextView) findViewById(R.id.vip);
+
         account = (TextView) findViewById(R.id.account);
         metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
@@ -114,6 +114,22 @@ public class Movie_view extends AppCompatActivity {
 
     public void button() {
         ImageView setting = (ImageView) findViewById(R.id.setting);
+        ImageView search = (ImageView) findViewById(R.id.search);
+        Button button1 = (Button) findViewById(R.id.button1);
+        Button button3 = (Button) findViewById(R.id.button3);
+        Button button2 = (Button) findViewById(R.id.button2);
+        TextView game1 = (TextView) findViewById(R.id.game1);
+
+
+        game1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Movie_view.this, Game1.class);
+                startActivity(intent);
+            }
+        });
+
+
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +140,6 @@ public class Movie_view extends AppCompatActivity {
             }
         });
 
-        ImageView search = (ImageView) findViewById(R.id.search);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,7 +151,6 @@ public class Movie_view extends AppCompatActivity {
         });
 
 
-        Button button1 = (Button) findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,14 +158,13 @@ public class Movie_view extends AppCompatActivity {
             }
         });
 
-        Button button2 = (Button) findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(1);
             }
         });
-        Button button3 = (Button) findViewById(R.id.button3);
+
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,24 +179,14 @@ public class Movie_view extends AppCompatActivity {
                     Intent intent = new Intent(Movie_view.this, Login.class);
                     startActivity(intent);
                 } else {
-                    VIP = false;
-                    ACCOUNT = null;
-                    account.setText("点击登录");
-                    vip.setText("获取好人卡");
+                    Intent intent = new Intent(Movie_view.this, user.class);
+                    startActivity(intent);
+
                 }
 
             }
         });
-        vip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent intent = new Intent(Movie_view.this, Webview.class);
-                intent.putExtra("url", Setting.URL + "/user/movie/movie_vip");
-                startActivity(intent);
-
-            }
-        });
 
     }
 
@@ -207,11 +210,13 @@ public class Movie_view extends AppCompatActivity {
             account.setText(msg.getData().getString("account"));
             ACCOUNT = msg.getData().getString("account");
             Log.e("VIP", VIP.toString());
+
             if (VIP == true) {
-                vip.setText("好人卡");
+
             }
         }
     };
+
 
     public Handler note = new Handler() {
         @Override
@@ -219,7 +224,7 @@ public class Movie_view extends AppCompatActivity {
             super.handleMessage(msg);
             if (msg.what == 0) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Movie_view.this);
-                alertDialogBuilder.setMessage("无法连接到服务,请检查是否连接上校园网WIFI\"HNIU\"！");
+                alertDialogBuilder.setMessage("无法连接到服务,请检查是否连接上校园网WIFI\"HNIU\"！本APP仅限服务于湖南信息职业技术学院");
                 alertDialogBuilder.setCancelable(false);
                 alertDialogBuilder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
@@ -230,7 +235,6 @@ public class Movie_view extends AppCompatActivity {
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
             }
-
 
             if (msg.what == 9) {
                 LayoutInflater layoutInflater = getLayoutInflater();
@@ -388,7 +392,6 @@ public class Movie_view extends AppCompatActivity {
 
     }
 
-
     class update_text extends AsyncTask<Void, Void, Void> {
 
         String str;
@@ -450,20 +453,24 @@ public class Movie_view extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            if (new locallogin().login() != true) {
+            if (new local_login().auto_login() == true) {
+                Log.e("login", "true");
+                return true;
+            } else {
                 Log.e("login", "false");
                 return false;
             }
-
-            return true;
         }
-
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             if (aBoolean == true) {
-                Toast.makeText(Movie_view.this, "登录成功", Toast.LENGTH_SHORT);
+                Toast.makeText(Movie_view.this, "登录成功", Toast.LENGTH_SHORT).show();
+                MainActivity.sharedPreferences = getSharedPreferences(ACCOUNT, MODE_APPEND).edit();
+                MainActivity.sp = getSharedPreferences(Movie_view.ACCOUNT, MODE_APPEND);
+                new sign_up().execute();
             }
+
 
         }
     }
@@ -491,6 +498,7 @@ public class Movie_view extends AppCompatActivity {
             }
         }
     }
+
 
     public void onBackPressed() {
         if (i > 0) {

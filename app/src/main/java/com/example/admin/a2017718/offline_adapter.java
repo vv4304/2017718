@@ -3,6 +3,7 @@ package com.example.admin.a2017718;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -167,7 +168,28 @@ public class offline_adapter extends BaseAdapter {
                 e.printStackTrace();
             }
             Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
-            imageView.setImageBitmap(bitmap);
+
+
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+
+            // 计算缩放比例
+            float scaleWidth = ((float) 240) / width;
+            float scaleHeight = ((float) 320) / height;
+            // 取得想要缩放的matrix参数
+
+            Matrix matrix = new Matrix();
+            matrix.postScale(scaleWidth, scaleHeight);
+
+            Bitmap newbm = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+
+
+
+
+
+
+
+            imageView.setImageBitmap(newbm);
         }
     }
 

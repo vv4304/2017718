@@ -56,9 +56,9 @@ public class palyplay_offline_adapter extends BaseAdapter {
             name.setText(PlayPlay.infometion.get(0));
             type.setText("豆瓣评分：" + PlayPlay.infometion.get(1) + "   " + "上映日期：" + PlayPlay.infometion.get(3));
             if (PlayPlay.infometion.get(4).equals("1")) {
-                pay.setText("需要好人卡才可免流观看");
+                pay.setText("需要消耗2个观影卷才能播放此剧");
             } else {
-                pay.setText("免流试看");
+                pay.setText("试看");
             }
 
         }
@@ -117,27 +117,20 @@ public class palyplay_offline_adapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (Movie_view.ACCOUNT != null) {
+                        if (MainActivity.sp.getInt("money", 0) >= 2) {
 
-                        if (PlayPlay.infometion.get(4).equals("1")) {
-                            if (Movie_view.VIP == true) {
-                                Toast.makeText(context, "正在为你播放，加载可能有点慢请稍等", Toast.LENGTH_SHORT).show();
-                                PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
-                                PlayPlay.ijk.setTitle("第" + (position + 1) + "集");
-                                PlayPlay.ijk.setVideoUrl(PlayPlay.lists.get(position));
-                                PlayPlay.ijk.start();
-                            } else {
-                                Toast.makeText(context, "此影片需要好人卡才能播放", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(context, Webview.class);
-                                intent.putExtra("url", Setting.URL + "/user/movie/movie_vip");
-                                context.startActivity(intent);
-                            }
-
-                        } else {
-                            Toast.makeText(context, "正在为你播放，加载可能有点慢请稍等", Toast.LENGTH_SHORT).show();
+                            MainActivity.sharedPreferences.putInt("money", MainActivity.sp.getInt("money", 0) - 2);
+                            MainActivity.sharedPreferences.apply();
                             PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
                             PlayPlay.ijk.setTitle("第" + (position + 1) + "集");
                             PlayPlay.ijk.setVideoUrl(PlayPlay.lists.get(position));
                             PlayPlay.ijk.start();
+                            Toast.makeText(context, "播放消耗2个观影卷,剩余数量：" + String.valueOf(MainActivity.sp.getInt("money", 0)), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "需要消耗2个观影卷才能播放此剧", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(context, Webview.class);
+                            intent.putExtra("url", Setting.URL + "/index/login/login");
+                            context.startActivity(intent);
                         }
 
 

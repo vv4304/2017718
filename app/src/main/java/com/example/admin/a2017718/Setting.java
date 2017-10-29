@@ -1,6 +1,7 @@
 package com.example.admin.a2017718;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,6 +32,7 @@ import java.io.InputStream;
 public class Setting extends AppCompatActivity {
 
     public static final String URL = "http://sv.icodef.com/";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,33 +51,32 @@ public class Setting extends AppCompatActivity {
         file.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Setting.this,"未完成",Toast.LENGTH_SHORT).show();
+                Toast.makeText(Setting.this, "未完成", Toast.LENGTH_SHORT).show();
                 // filelist();
+/*
+                final SharedPreferences.Editor output = getSharedPreferences(Movie_view.ACCOUNT, MODE_APPEND).edit();
+                output.putInt("money",100);
+                output.apply();
+*/
+
             }
         });
 
-        Button submit= (Button) findViewById(R.id.submit);
+        Button submit = (Button) findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(Movie_view.ACCOUNT!=null)
-                {
-                    Intent intent=new Intent(Setting.this, com.example.admin.a2017718.feedback.class);
+                if (Movie_view.ACCOUNT != null) {
+                    Intent intent = new Intent(Setting.this, com.example.admin.a2017718.feedback.class);
                     startActivity(intent);
-                }
-                else {
-                    Toast.makeText(Setting.this,"你没有登录，无法发送反馈",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Setting.this, "你没有登录，无法发送反馈", Toast.LENGTH_SHORT).show();
                 }
 
 
             }
         });
-
-
-
-
-
 
 
     }
@@ -131,10 +132,6 @@ public class Setting extends AppCompatActivity {
 
 
     }
-
-
-
-
 
 
 }

@@ -24,7 +24,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.List;
 
 /**
  * Created by admin on 2017/7/19.
@@ -82,88 +81,85 @@ public class Login extends AppCompatActivity {
 
     class login extends AsyncTask<String, Void, String> {
 
+        String login = null;
+        URL url1 = null;
+        String user = null;
+        HttpURLConnection getuser = null;
 
         @Override
         protected String doInBackground(String... params) {
 
-            String data = "user=" + params[0] + "&pwd=" + params[1];
 
             try {
-                URL url = new URL(Setting.URL + "/index/login/login");
-                HttpURLConnection http = (HttpURLConnection) url.openConnection();
-                http.setRequestMethod("POST");
-                http.setConnectTimeout(5000);
+                login = new local_login().login(params[0], params[1]);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
 
-                http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                http.setRequestProperty("Content-Length", String.valueOf(data.length()));
-                http.setDoOutput(true);
-                http.setDoInput(true);
+            Log.e("login", login);
 
-                OutputStream out = http.getOutputStream();
-                out.write(data.getBytes());
-                out.close();
-
-
-                if (http.getResponseCode() == 200) {
-
-
-                    InputStream in = http.getInputStream();
-                    String str = new httpcontent().readstream(in);
-                    JSONObject json = new JSONObject(str);
-
-
-                    if (json.getString("msg").equals("登陆成功")) {
-                        List<String> map = http.getHeaderFields().get("Set-Cookie");
-                        Movie_view.uid_token = map.get(0).substring(0, map.get(0).indexOf(";")) + ";" + map.get(1).substring(0, map.get(1).indexOf(";"));
-                        URL url1 = new URL(Setting.URL + "/user/api/getauth");
-                        HttpURLConnection getuser = (HttpURLConnection) url1.openConnection();
-                        getuser.setRequestProperty("Cookie", Movie_view.uid_token);
-                        getuser.setDoInput(true);
-                        getuser.setRequestMethod("GET");
-                        getuser.setConnectTimeout(5000);
-                        String login = new httpcontent().readstream(getuser.getInputStream());
-
-
-                        if (login != null) {
-
-                            if (login.indexOf("影视VIP") != -1) {
-                                Movie_view.VIP = true;
-                            }
-
-                            if (new locallogin().writelogin(params[0], params[1]) != true) {
-                                Log.e("weitelogin", "写入错误");
-                            }
-
-                        }
-                        return "登陆成功";
-
-                    } else {
-                        return json.getString("msg");
-                    }
-
-                } else {
-                    return "连接失败";
+            if (login.equals("登陆成功")) {
+                try {
+                    url1 = new URL(Setting.URL + "/user/api/getauth");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
                 }
 
+                try {
+                    getuser = (HttpURLConnection) url1.openConnection();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                getuser.setRequestProperty("Cookie", Movie_view.uid_token);
+                getuser.setDoInput(true);
+                try {
+                    getuser.setRequestMethod("GET");
+                } catch (ProtocolException e) {
+                    e.printStackTrace();
+                }
+                getuser.setConnectTimeout(5000);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                try {
+                    user = new httpcontent().readstream(getuser.getInputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Log.e("login", user);
+
+                if (user != null) {
+
+                    if (user.indexOf("你没有相应的权限") != -1) {
+                        return "无法登录：你的注册帐号可能没有通过邮箱激活,请登录你填写的邮箱中查看激活连接";
+                    }
+/*
+                    if (login.indexOf("影视VIP") != -1) {
+                        Movie_view.VIP = true;
+                    }
+*/
+                    if (new local_login().writelogin(params[0], params[1]) != true) {
+                        Log.e("weitelogin", "写入错误");
+                    }
+                }
+
+                return "登陆成功";
+
+            } else {
+                return login;
             }
-            return "null";
+
 
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.e("dada", s);
 
 
             if (s.equals("登陆成功")) {
-
-
+                Movie_view.ACCOUNT = account.getText().toString();
                 Message msg = new Message();
                 Bundle bundle = new Bundle();
                 bundle.putString("account", account.getText().toString());
@@ -171,6 +167,10 @@ public class Login extends AppCompatActivity {
                 Movie_view.handler.sendMessage(msg);
                 Toast.makeText(Login.this, s, Toast.LENGTH_SHORT).show();
                 finish();
+
+                MainActivity.sharedPreferences = getSharedPreferences(Movie_view.ACCOUNT, MODE_APPEND).edit();
+                MainActivity.sp=getSharedPreferences(Movie_view.ACCOUNT,MODE_APPEND);
+                new sign_up().execute();
 
             } else {
                 Toast.makeText(Login.this, s, Toast.LENGTH_SHORT).show();
@@ -237,6 +237,7 @@ public class Login extends AppCompatActivity {
                     String str = new httpcontent().readstream(in);
                     JSONObject json = new JSONObject(str);
 
+                    Log.e("register", str);
 
                     if (json.getString("msg").equals("注册成功")) {
                         return "注册成功";

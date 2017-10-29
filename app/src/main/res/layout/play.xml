@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="20dp"
-            android:text="blablabla\nヾ(。￣□￣)ﾂ゜゜゜"
+            android:text="blablabla\nヾ(。￣□￣)ﾂ゜゜゜\n没有想看的影片？设置里点击反馈"
             android:textColor="#ffffff"
             android:textSize="10dp" />
 
@@ -176,9 +176,10 @@
         android:id="@+id/play_controller"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
         android:background="@drawable/shape_bottom"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:layout_width="match_parent"

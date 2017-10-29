@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,14 +40,14 @@ import static com.example.admin.a2017718.PlayPlay.youku;
  * Created by admin on 2017/8/19.
  */
 
-public class plaplay_online_adapter extends BaseAdapter {
+public class playplay_online_adapter extends BaseAdapter {
     LayoutInflater inflater;
     RecyclerView recyclerView;
     Spinner sp;
     Context context;
     String select;
     Henadatpter henadatpter = null;
-    plaplay_online_adapter(Context context) {
+    playplay_online_adapter(Context context) {
         this.context = context;
     }
 
@@ -95,8 +96,10 @@ public class plaplay_online_adapter extends BaseAdapter {
             sp.setAdapter(eduAdapter);
 
 
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+           LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+           linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+
             recyclerView.setLayoutManager(linearLayoutManager);
 
             sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -345,17 +348,18 @@ public class plaplay_online_adapter extends BaseAdapter {
                 public void onClick(View v) {
 
                     if (Movie_view.ACCOUNT != null) {
-                        if (Movie_view.VIP == true) {
+                        if (MainActivity.sp.getInt("money", 0) >= 2) {
+                            MainActivity.sharedPreferences.putInt("money", MainActivity.sp.getInt("money", 0) - 2);
+                            MainActivity.sharedPreferences.apply();
                             PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
                             PlayPlay.ijk.setTitle("第"+(position+1)+"集");
                             new loadurl().execute(position);
-                            Toast.makeText(context,"正在为你播放，加载可能有点慢请稍等",Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(context, "播放消耗2个观影卷,剩余数量："+String.valueOf(MainActivity.sp.getInt("money", 0)), Toast.LENGTH_SHORT).show();
 
                         } else {
-                            Toast.makeText(Movie_view.context,"需要好人卡才能播放此剧",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Movie_view.context,"需要消耗2个观影卷才能播放此剧",Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(context, Webview.class);
-                            intent.putExtra("url", Setting.URL+"/user/movie/movie_vip");
+                            intent.putExtra("url", Setting.URL+"/index/login/login");
                             context.startActivity(intent);
                         }
                     } else {

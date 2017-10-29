@@ -180,7 +180,7 @@ public class PlayPlay extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            listView.setAdapter(new plaplay_online_adapter(PlayPlay.this));
+            listView.setAdapter(new playplay_online_adapter(PlayPlay.this));
         }
     }
 

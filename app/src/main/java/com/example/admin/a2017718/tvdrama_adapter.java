@@ -3,6 +3,7 @@ package com.example.admin.a2017718;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,19 +38,11 @@ public class tvdrama_adapter extends BaseAdapter {
 
     public tvdrama_adapter(Context context) {
         this.context = context;
-
-
         if (Movie_view.tv_drama.size() == 0) {
-
             new getitme().execute(Page);
             Page++;
-
-
         }
-
-
     }
-
 
     @Override
     public int getCount() {
@@ -69,31 +62,18 @@ public class tvdrama_adapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-
         if (position == Movie_view.tv_drama.size() - 1 && down != true) {
-
-
             new getitme().execute(Page);
             Page++;
-
-
         }
 
-
         convertView = LayoutInflater.from(context).inflate(R.layout.item, parent, false);
-
-
         TextView update = (TextView) convertView.findViewById(R.id.vip);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.image1);
         TextView name = (TextView) convertView.findViewById(R.id.name);
-
-
         name.setText(Movie_view.tv_drama.get(position).getId());
         update.setText(Movie_view.tv_drama.get(position).getPay());
-
         new loadimage().execute(Movie_view.tv_drama.get(position).getId(), Movie_view.tv_drama.get(position).getName(), imageView);
-
-
         return convertView;
     }
 
@@ -105,43 +85,32 @@ public class tvdrama_adapter extends BaseAdapter {
 
         @Override
         protected Boolean doInBackground(Integer... params) {
-
-            String src = new httpcontent().GET("http://video.visha.cc/search?class=%E7%94%B5%E8%A7%86%E5%89%A7&page=" + params[0],false);
-
-            if(src.indexOf("DOCTYPE")!=-1||src.equals("ERROR"))
-            {
-                Log.e("page2","无法连接");
+            String src = new httpcontent().GET("http://video.visha.cc/search?class=%E7%94%B5%E8%A7%86%E5%89%A7&page=" + params[0], false);
+            if (src.indexOf("DOCTYPE") != -1 || src.equals("ERROR")) {
+                Log.e("page2", "无法连接");
                 return false;
             }
-
             try {
                 jsonObject = new JSONObject(src);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            try {
+                jsonArray = jsonObject.getJSONArray("rows");
+            } catch (JSONException e) {
+            }
+            for (int i = 0; i < jsonArray.length(); i++) {
                 try {
-                    jsonArray = jsonObject.getJSONArray("rows");
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    Movie_view.tv_drama.add(new movies(jsonObject.getString("title"), jsonObject.getString("update"), jsonObject.getString("image"), jsonObject.getString("url")));
                 } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
 
-                for (int i = 0; i < jsonArray.length(); i++) {
+            }
 
-                    try {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-
-                        Movie_view.tv_drama.add(new movies(jsonObject.getString("title"), jsonObject.getString("update"), jsonObject.getString("image"), jsonObject.getString("url")));
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
-
-                return true;
+            return true;
 
         }
 
@@ -153,7 +122,9 @@ public class tvdrama_adapter extends BaseAdapter {
                 if (Page == 2) {
                     notifyDataSetChanged();
                 }
-            }else {Page2.offlineview.setVisibility(View.VISIBLE);}
+            } else {
+                Page2.offlineview.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -250,25 +221,23 @@ public class tvdrama_adapter extends BaseAdapter {
 
 
             Bitmap bitmap = BitmapFactory.decodeStream(fileInputStream);
-/*
+
             // 获得图片的宽高
             int width = bitmap.getWidth();
             int height = bitmap.getHeight();
-            // 设置想要的大小
-            int newWidth = 240;
-            int newHeight = 320;
-            // 计算缩放比例
-            float scaleWidth = ((float) newWidth) / width;
-            float scaleHeight = ((float) newHeight) / height;
-            // 取得想要缩放的matrix参数
 
+            // 设置想要的大小
+            // 计算缩放比例
+            float scaleWidth = ((float) 240) / width;
+            float scaleHeight = ((float) 320) / height;
+            // 取得想要缩放的matrix参数
 
             Matrix matrix = new Matrix();
             matrix.postScale(scaleWidth, scaleHeight);
             // 得到新的图片
-            Bitmap newbm = Bitmap.createBitmap(bitmap,0,0, width, height, matrix, true);
-*/
-            imageView.setImageBitmap(bitmap);
+            Bitmap newbm = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+
+            imageView.setImageBitmap(newbm);
 
 
         }

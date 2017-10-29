@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="反馈"
+            android:text="反馈申请"
             android:textColor="#FFFFFF"
             android:textSize="20dp" />
 
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="你可以在这里输入你想要观看的影片或者写关于本app的一些问题,我们会尽快处理" />
+        android:text="你可以在这里输入你想要观看的影片或者写关于本应用的一些问题,我们会尽快处理" />
 
     <EditText
         android:id="@+id/content"
@@ -47,7 +47,7 @@
         android:layout_margin="10dp"
         android:background="#7CFC00"
         android:text="提交"
-        android:textColor="#8B2323" />
+        android:textColor="#FFFFFF" />
 
 
 </LinearLayout>
