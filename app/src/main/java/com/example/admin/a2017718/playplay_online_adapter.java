@@ -348,18 +348,17 @@ public class playplay_online_adapter extends BaseAdapter {
                 public void onClick(View v) {
 
                     if (Movie_view.ACCOUNT != null) {
-                        if (MainActivity.sp.getInt("money", 0) >= 2) {
-                            MainActivity.sharedPreferences.putInt("money", MainActivity.sp.getInt("money", 0) - 2);
+                        if (MainActivity.sp.getInt("money", 0) >= 1) {
+                            MainActivity.sharedPreferences.putInt("money", MainActivity.sp.getInt("money", 0) - 1);
                             MainActivity.sharedPreferences.apply();
                             PlayPlay.ijk.loading.setVisibility(View.VISIBLE);
                             PlayPlay.ijk.setTitle("第"+(position+1)+"集");
                             new loadurl().execute(position);
-                            Toast.makeText(context, "播放消耗2个观影卷,剩余数量："+String.valueOf(MainActivity.sp.getInt("money", 0)), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "播放消耗1个观影卷,剩余数量："+String.valueOf(MainActivity.sp.getInt("money", 0)), Toast.LENGTH_SHORT).show();
 
                         } else {
-                            Toast.makeText(Movie_view.context,"需要消耗2个观影卷才能播放此剧",Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(context, Webview.class);
-                            intent.putExtra("url", Setting.URL+"/index/login/login");
+                            Toast.makeText(Movie_view.context,"需要消耗1个观影卷才能播放此剧",Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(context, user.class);
                             context.startActivity(intent);
                         }
                     } else {

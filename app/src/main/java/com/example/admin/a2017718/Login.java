@@ -30,7 +30,6 @@ import java.net.URL;
  */
 
 public class Login extends AppCompatActivity {
-
     EditText account;
     EditText password;
     public static String uid_token;
@@ -39,7 +38,6 @@ public class Login extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
         account = (EditText) findViewById(R.id.account);
         password = (EditText) findViewById(R.id.password);
         final TextView login = (TextView) findViewById(R.id.login);
@@ -53,7 +51,6 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         });
-
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,22 +62,16 @@ public class Login extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (register.getText().toString().equals("注册")) {
                     new register().execute(account.getText().toString(), password.getText().toString(), emailedittext.getText().toString());
                 } else {
                     new login().execute(account.getText().toString(), password.getText().toString());
                 }
-
             }
         });
-
-
     }
 
-
     class login extends AsyncTask<String, Void, String> {
-
         String login = null;
         URL url1 = null;
         String user = null;
@@ -88,8 +79,6 @@ public class Login extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-
-
             try {
                 login = new local_login().login(params[0], params[1]);
             } catch (IOException e1) {
@@ -97,16 +86,13 @@ public class Login extends AppCompatActivity {
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
-
             Log.e("login", login);
-
             if (login.equals("登陆成功")) {
                 try {
                     url1 = new URL(Setting.URL + "/user/api/getauth");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-
                 try {
                     getuser = (HttpURLConnection) url1.openConnection();
                 } catch (IOException e) {
@@ -120,17 +106,13 @@ public class Login extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 getuser.setConnectTimeout(5000);
-
                 try {
                     user = new httpcontent().readstream(getuser.getInputStream());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 Log.e("login", user);
-
                 if (user != null) {
-
                     if (user.indexOf("你没有相应的权限") != -1) {
                         return "无法登录：你的注册帐号可能没有通过邮箱激活,请登录你填写的邮箱中查看激活连接";
                     }
@@ -143,21 +125,15 @@ public class Login extends AppCompatActivity {
                         Log.e("weitelogin", "写入错误");
                     }
                 }
-
                 return "登陆成功";
-
             } else {
                 return login;
             }
-
-
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
-
             if (s.equals("登陆成功")) {
                 Movie_view.ACCOUNT = account.getText().toString();
                 Message msg = new Message();
@@ -167,9 +143,8 @@ public class Login extends AppCompatActivity {
                 Movie_view.handler.sendMessage(msg);
                 Toast.makeText(Login.this, s, Toast.LENGTH_SHORT).show();
                 finish();
-
                 MainActivity.sharedPreferences = getSharedPreferences(Movie_view.ACCOUNT, MODE_APPEND).edit();
-                MainActivity.sp=getSharedPreferences(Movie_view.ACCOUNT,MODE_APPEND);
+                MainActivity.sp = getSharedPreferences(Movie_view.ACCOUNT, MODE_APPEND);
                 new sign_up().execute();
 
             } else {
@@ -178,7 +153,6 @@ public class Login extends AppCompatActivity {
 
         }
     }
-
 
     class register extends AsyncTask<Object, Object, String> {
 
@@ -278,6 +252,5 @@ public class Login extends AppCompatActivity {
             }
         }
     }
-
 
 }

@@ -5,7 +5,6 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,9 +24,7 @@
             android:text="设置"
             android:textColor="#FFFFFF"
             android:textSize="20dp" />
-
     </LinearLayout>
-
 
     <Button
         android:id="@+id/submit"
@@ -54,14 +51,14 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:background="#FF88FF"
-        android:text="低至9.9一个月校园网群：175853183"
+        android:text="低至9.9一个月共享校园网帐号群：175853183"
         android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:text="本站离线资源来源于BT互联网,独播内容均为二次转码添加字幕压制搬运!在线影视来源于腾讯爱奇艺搜狐优酷等视频媒体如有议意联系方式：vv4304@qq.com" />
+        android:text="本站离线资源来源于BT互联网,独播内容均为二次转码添加字幕压制搬运!学习所用联系方式：vv4304@qq.com" />
 
 
 </LinearLayout>

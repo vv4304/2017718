@@ -52,7 +52,6 @@ public class httpcontent {
             return "ERROR";
         }
     }
-
     public String POST(String... str) throws IOException {
         String data = "call=" + URLEncoder.encode(str[0], "UTF-8") + "&msg=" + URLEncoder.encode(str[1], "UTF-8") + "&type=2";
         URL url = new URL(Setting.URL + "user/api/feedback");
@@ -78,7 +77,6 @@ public class httpcontent {
         }
         return "ERROR";
     }
-
     public String readstream(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] bytes = new byte[1024];
@@ -89,5 +87,4 @@ public class httpcontent {
         inputStream.close();
         return new String(byteArrayOutputStream.toByteArray(), "UTF-8");
     }
-
 }

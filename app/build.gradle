@@ -1,14 +1,13 @@
 apply plugin: 'com.android.application'
-
 android {
     compileSdkVersion 24
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.example.admin.a2017718"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 8
-        versionName "4.6"
+        versionCode 11
+        versionName "4.72"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -17,25 +16,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']  /**在libs文件夹下找so文件*/
         }
     }
-
-
 }
-
-
 repositories {
     mavenCentral()
     flatDir {
         dirs 'libs' /**在libs文件夹下找aar文件*/
     }
 }
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -46,5 +38,4 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile'com.android.support:recyclerview-v7:25.1.0'
     compile(name: 'ijkplayer-java-release', ext: 'aar') /**编译ijkplayer-java-release.aar文件*/
-
 }

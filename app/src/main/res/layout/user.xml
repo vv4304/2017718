@@ -76,7 +76,7 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/button_1"
-            android:text="充值" />
+            android:text="获得" />
 
         <Button
             android:id="@+id/output"
@@ -85,7 +85,7 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/button_1"
-            android:text="申请转换提现" />
+            android:text="抽奖" />
 
     </LinearLayout>
 
@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="30dp"
-        android:text="100观影卷=10元\n观影卷满100可提现\n观影卷可每日签到或抽奖获得" />
+        android:text="观影卷可每日登录或抽奖获得" />
 
 
     <Button

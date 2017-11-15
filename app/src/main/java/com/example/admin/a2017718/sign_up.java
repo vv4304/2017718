@@ -31,7 +31,7 @@ public class sign_up extends AsyncTask<Void, Void, String> {
                 MainActivity.sharedPreferences.apply();
 
 
-                return "每日签到成功获得" + i + "个观影卷";
+                return "每日自动签到成功获得" + i + "个观影卷";
             } else if (jsonObject.getString("msg").equals("今天已经签过到了")) {
                 return "今天已经签过到了";
             }

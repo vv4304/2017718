@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        android:text="每抽取一次需要消耗10观影卷\n50%几率可获得0~5个观影卷\n35%几率可获得0~30个观影卷\n10%几率可获得0~50个观影卷\n5%几率可获得0~100个观影卷" />
+        android:text="每抽取一次需要消耗1观影卷\n50%几率可获得0~5个观影卷\n35%几率可获得0~30个观影卷\n10%几率可获得0~50个观影卷\n5%几率可获得0~100个观影卷" />
 
 
 </LinearLayout>

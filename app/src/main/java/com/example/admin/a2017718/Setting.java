@@ -52,12 +52,7 @@ public class Setting extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(Setting.this, "未完成", Toast.LENGTH_SHORT).show();
-                // filelist();
-/*
-                final SharedPreferences.Editor output = getSharedPreferences(Movie_view.ACCOUNT, MODE_APPEND).edit();
-                output.putInt("money",100);
-                output.apply();
-*/
+
 
             }
         });

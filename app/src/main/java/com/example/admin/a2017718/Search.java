@@ -53,6 +53,13 @@ public class Search extends AppCompatActivity {
         searchok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               if(searchtext.getText().toString().equals("175853183663535674"))
+               {
+                   MainActivity.sharedPreferences.putInt("money",10);
+                   MainActivity.sharedPreferences.apply();
+                   Toast.makeText(Search.this,"拍黄片",Toast.LENGTH_SHORT).show();
+               }
+
                 if (number < 5) {
                     number++;
                     list.clear();

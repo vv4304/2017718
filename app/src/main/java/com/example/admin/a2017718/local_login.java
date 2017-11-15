@@ -27,7 +27,6 @@ import static com.example.admin.a2017718.Movie_view.context;
  */
 
 public class local_login {
-
     public Boolean writelogin(String account, String password) {
         FileOutputStream fileOutputStream = null;
         String data = null;
@@ -59,8 +58,6 @@ public class local_login {
 
         return true;
     }
-
-
     public Boolean auto_login() {
 
         String json = null;
@@ -174,7 +171,6 @@ public class local_login {
 
         return false;
     }
-
     public String login(String user, String password) throws IOException, JSONException {
 
         String data = "user=" + user + "&pwd=" + password;
@@ -216,6 +212,4 @@ public class local_login {
 
 
     }
-
-
 }

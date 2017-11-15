@@ -42,6 +42,7 @@ import java.util.List;
 
 /**
  * Created by admin on 2017/7/19.
+ * 2017、11.10最后一次更新
  */
 public class Movie_view extends AppCompatActivity {
     int i = 1;
@@ -63,14 +64,11 @@ public class Movie_view extends AppCompatActivity {
     public static String uid_token = "null";
     String update_url;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content);
-
         new online().execute();
-
         account = (TextView) findViewById(R.id.account);
         metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
@@ -82,28 +80,23 @@ public class Movie_view extends AppCompatActivity {
 
     public void frist() {
         new login().execute();
-
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new Page1());
         fragments.add(new Page2());
         fragments.add(new Page3());
-
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(), fragments));
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
                 LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) line1.getLayoutParams();
                 lp.leftMargin = (int) (positionOffset * metric.widthPixels / 3) + metric.widthPixels / 3 * position;
                 line1.setLayoutParams(lp);
             }
-
             @Override
             public void onPageSelected(int position) {
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -118,28 +111,13 @@ public class Movie_view extends AppCompatActivity {
         Button button1 = (Button) findViewById(R.id.button1);
         Button button3 = (Button) findViewById(R.id.button3);
         Button button2 = (Button) findViewById(R.id.button2);
-        TextView game1 = (TextView) findViewById(R.id.game1);
-
-
-        game1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Movie_view.this, Game1.class);
-                startActivity(intent);
-            }
-        });
-
-
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(Movie_view.this, Setting.class);
                 startActivity(intent);
-
             }
         });
-
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,29 +127,24 @@ public class Movie_view extends AppCompatActivity {
 
             }
         });
-
-
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(0);
             }
         });
-
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(1);
             }
         });
-
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 viewPager.setCurrentItem(2);
             }
         });
-
         account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,13 +154,9 @@ public class Movie_view extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(Movie_view.this, user.class);
                     startActivity(intent);
-
                 }
-
             }
         });
-
-
     }
 
     public void viewfrist() {
@@ -210,13 +179,10 @@ public class Movie_view extends AppCompatActivity {
             account.setText(msg.getData().getString("account"));
             ACCOUNT = msg.getData().getString("account");
             Log.e("VIP", VIP.toString());
-
             if (VIP == true) {
-
             }
         }
     };
-
 
     public Handler note = new Handler() {
         @Override
@@ -235,26 +201,19 @@ public class Movie_view extends AppCompatActivity {
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
             }
-
             if (msg.what == 9) {
                 LayoutInflater layoutInflater = getLayoutInflater();
                 View view = layoutInflater.inflate(R.layout.dialog, null);
                 builder.setView(view);
-
-
                 builder.setCancelable(false);
                 alertDialog = builder.create();
                 alertDialog.show();
             }
-
-
         }
     };
 
 
     class examine_update extends AsyncTask<String, Void, Boolean> {
-
-
         @Override
         protected Boolean doInBackground(String... params) {
             JSONObject jsonObject = null;
@@ -266,11 +225,8 @@ public class Movie_view extends AppCompatActivity {
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
-
             String str = new httpcontent().GET(params[0], false);
             Log.e("version", str);
-
-
             try {
                 jsonObject = new JSONObject(str);
                 version = jsonObject.getInt("v");
@@ -279,14 +235,11 @@ public class Movie_view extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-
             if (version > packageInfo.versionCode) {
                 return true;
             }
-
             return false;
         }
-
 
         @Override
         protected void onPostExecute(Boolean aVoid) {
@@ -294,41 +247,33 @@ public class Movie_view extends AppCompatActivity {
             if (aVoid == true) {
                 new update().execute();
             }
-
         }
     }
 
     class update extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-
             handler.sendEmptyMessage(1);
             InputStream inputStream = null;
             URL url = null;
             OutputStream outputStream = null;
             byte[] bytes = new byte[1024];
             int len = 0;
-
-
             try {
                 url = new URL(update_url);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-
             try {
                 inputStream = url.openStream();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             try {
                 outputStream = openFileOutput("1.apk", MODE_PRIVATE);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-
-
             try {
                 while ((len = inputStream.read(bytes)) > 0) {
                     outputStream.write(bytes, 0, len);
@@ -336,7 +281,6 @@ public class Movie_view extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             String[] command = {"chmod", "777", new File(getFilesDir() + "/1.apk").getPath()};
             ProcessBuilder builder = new ProcessBuilder(command);
             try {
@@ -344,13 +288,11 @@ public class Movie_view extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             if (Build.VERSION.SDK_INT <= 23) {
                 handler.sendEmptyMessage(0);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.fromFile(new File(getFilesDir() + "/1.apk")), "application/vnd.android.package-archive");
                 startActivity(intent);
-
             } else {
                 handler.sendEmptyMessage(0);
                 File file = new File(getFilesDir() + "/1.apk");
@@ -358,15 +300,10 @@ public class Movie_view extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 intent.setDataAndType(FileProvider.getUriForFile(Movie_view.this, "com.example.admin.a2017718", file), "application/vnd.android.package-archive");
                 startActivity(intent);
-
             }
-
             finish();
-
-
             return null;
         }
-
 
         Handler handler = new Handler() {
 
@@ -380,31 +317,22 @@ public class Movie_view extends AppCompatActivity {
                     alertDialog = builder.create();
                     alertDialog.show();
                 }
-
                 if (msg.what == 0) {
                     alertDialog.dismiss();
                 }
-
-
             }
         };
-
-
     }
 
     class update_text extends AsyncTask<Void, Void, Void> {
-
         String str;
 
         @Override
         protected Void doInBackground(Void... params) {
-
             try {
                 JSONObject jsonObject = new JSONObject(new httpcontent().GET(Setting.URL + "/index/api/notice_m", false));
                 str = jsonObject.getString("msg");
                 handler.sendEmptyMessage(1);
-
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -423,7 +351,6 @@ public class Movie_view extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 1) {
-
                     LayoutInflater layoutInflater = getLayoutInflater();
                     View view = layoutInflater.inflate(R.layout.notice, null);
                     TextView textView = (TextView) view.findViewById(R.id.notice);
@@ -441,18 +368,13 @@ public class Movie_view extends AppCompatActivity {
                     alertDialog = builder.create();
                     alertDialog.show();
                 }
-
             }
         };
-
-
     }
 
     class login extends AsyncTask<Void, Void, Boolean> {
-
         @Override
         protected Boolean doInBackground(Void... params) {
-
             if (new local_login().auto_login() == true) {
                 Log.e("login", "true");
                 return true;
@@ -461,6 +383,7 @@ public class Movie_view extends AppCompatActivity {
                 return false;
             }
         }
+
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
@@ -470,8 +393,6 @@ public class Movie_view extends AppCompatActivity {
                 MainActivity.sp = getSharedPreferences(Movie_view.ACCOUNT, MODE_APPEND);
                 new sign_up().execute();
             }
-
-
         }
     }
 
@@ -485,20 +406,17 @@ public class Movie_view extends AppCompatActivity {
             } else {
                 return true;
             }
-
         }
 
         @Override
         protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
-
             if (aVoid == true) {
                 // new update().execute(Setting.URL + "/index/api/update_m");
                 new update_text().execute();
             }
         }
     }
-
 
     public void onBackPressed() {
         if (i > 0) {

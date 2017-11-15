@@ -51,36 +51,20 @@ public class user extends AppCompatActivity {
 
             }
         });
-
         value.setText("$ " + String.valueOf(sharedPreferences.getInt("money", 0)) + " 观影卷");
-
         input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(user.this, Webview.class);
                 intent.putExtra("url", Setting.URL + "/index/login/login");
                 startActivity(intent);
-                Toast.makeText(user.this, "需要充值请Q群内联系群主或管理", Toast.LENGTH_SHORT).show();
             }
         });
-
         output.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                AlertDialog.Builder alertdialog = new AlertDialog.Builder(user.this);
-                alertdialog.setMessage("（即将上线）");
-                alertdialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                AlertDialog alertDialog = alertdialog.show();
-
-
+                Intent intent = new Intent(user.this, Game1.class);
+                startActivity(intent);
             }
         });
 

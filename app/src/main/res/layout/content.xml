@@ -48,18 +48,6 @@
                 android:layout_weight="1"
                 android:gravity="right">
 
-                <TextView
-                    android:id="@+id/game1"
-                    android:text="抽"
-                    android:textColor="#009ecd"
-                    android:gravity="center"
-                    android:layout_width="20dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="#FFFFFF"
-                    android:layout_margin="3dp"
-
-                    />
 
                 <ImageView
                     android:id="@+id/search"

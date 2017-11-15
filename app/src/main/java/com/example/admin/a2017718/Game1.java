@@ -46,9 +46,9 @@ public class Game1 extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (input.getInt("money", 0) >= 10) {
+                if (input.getInt("money", 0) >= 1) {
                     String s;
-                    output.putInt("money", input.getInt("money", 0) - 10);
+                    output.putInt("money", input.getInt("money", 0) - 1);
                     output.apply();
                     s = String.valueOf(calculate.random());
                     value.setText(s);
